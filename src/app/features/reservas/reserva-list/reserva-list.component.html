@@ -1,0 +1,113 @@
+<div class="reservas-container">
+  <div class="page-header">
+    <h2>Gerenciamento de Reservas</h2>
+  </div>
+
+  <div class="search-panel">
+    <form [formGroup]="searchForm" (ngSubmit)="buscarReservas()">
+      <div class="toolbar-filters">
+        <mat-form-field appearance="outline">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option value="">Todos</mat-option>
+            <mat-option value="PENDENTE">Pendente</mat-option>
+            <mat-option value="CONFIRMADA">Confirmada</mat-option>
+            <mat-option value="CHECK_IN">Check-in</mat-option>
+            <mat-option value="CHECK_OUT">Check-out</mat-option>
+            <mat-option value="CANCELADA">Cancelada</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Hóspede</mat-label>
+          <input matInput formControlName="hospedeNome">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data de Entrada</mat-label>
+          <input matInput [matDatepicker]="entradaPicker" formControlName="dataEntrada">
+          <mat-datepicker-toggle matSuffix [for]="entradaPicker"></mat-datepicker-toggle>
+          <mat-datepicker #entradaPicker></mat-datepicker>
+        </mat-form-field>
+
+        <span class="toolbar-spacer"></span>
+
+        <button mat-flat-button color="primary" type="submit">
+          <mat-icon>search</mat-icon>
+          Pesquisar
+        </button>
+
+        <button mat-raised-button class="nova-reserva" type="button" (click)="abrirFormularioNovaReserva()">
+          <mat-icon>add</mat-icon>
+          Nova Reserva
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <mat-card>
+    <mat-card-content class="card-content">
+      <div class="table-container">
+        <ng-container *ngIf="reservas$ | async as reservas; else loading">
+          <div class="custom-table">
+            <!-- Cabeçalho da tabela -->
+            <div class="table-header">
+              <div class="table-row header-row">
+                <div class="table-cell header-cell">HÓSPEDE</div>
+                <div class="table-cell header-cell">DATA ENTRADA</div>
+                <div class="table-cell header-cell">SAÍDA PREVISTA</div>
+                <div class="table-cell header-cell">DATA CHECK-OUT</div>
+                <div class="table-cell header-cell">STATUS</div>
+                <div class="table-cell header-cell">VALOR</div>
+                <div class="table-cell header-cell">AÇÕES</div>
+              </div>
+            </div>
+            
+            <!-- Corpo da tabela -->
+            <div class="table-body">
+              <div class="table-row data-row" *ngFor="let reserva of reservas">
+                <div class="table-cell data-cell">{{ reserva.hospede?.nome || reserva.hospedeNome || 'N/A' }}</div>
+                <div class="table-cell data-cell">{{ reserva.dataEntrada | date:'dd/MM/yyyy' }}</div>
+                <div class="table-cell data-cell">{{ reserva.dataSaidaPrevista | date:'dd/MM/yyyy' }}</div>
+                <div class="table-cell data-cell">{{ reserva.dataCheckout ? (reserva.dataCheckout | date:'dd/MM/yyyy') : '-' }}</div>
+                <div class="table-cell data-cell">
+                  <span class="status-badge" [class]="'status-' + reserva.status.toLowerCase()">
+                    {{ reserva.status }}
+                  </span>
+                </div>
+                <div class="table-cell data-cell">
+                  {{ reserva.valorTotal ? (reserva.valorTotal | currency:'BRL':'symbol':'1.2-2') : '-' }}
+                </div>
+                <div class="table-cell data-cell actions-cell">
+                  <button mat-icon-button color="primary" (click)="editarReserva(reserva)" matTooltip="Editar">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button 
+                    *ngIf="canCheckIn(reserva)"
+                    mat-icon-button color="accent" (click)="realizarCheckIn(reserva)" matTooltip="Check-in">
+                    <mat-icon>login</mat-icon>
+                  </button>
+                  <button 
+                    *ngIf="canCheckOut(reserva)"
+                    mat-icon-button color="warn" (click)="realizarCheckOut(reserva)" matTooltip="Check-out">
+                    <mat-icon>logout</mat-icon>
+                  </button>
+                  <button mat-icon-button color="warn" (click)="excluirReserva(reserva)" matTooltip="Excluir">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Template de Carregamento -->
+        <ng-template #loading>
+          <div style="display: flex; justify-content: center; padding: 40px;">
+            <mat-spinner></mat-spinner>
+          </div>
+        </ng-template>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

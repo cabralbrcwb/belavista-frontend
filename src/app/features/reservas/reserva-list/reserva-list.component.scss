@@ -1,0 +1,203 @@
+.reservas-container {
+  padding: var(--spacing-lg);
+  background-color: var(--color-background);
+  min-height: 100vh;
+}
+
+.page-header h2 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-xl) 0;
+  font-family: var(--font-family-sans);
+}
+
+.search-panel {
+  margin-bottom: var(--spacing-xl);
+  background-color: var(--color-surface);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.toolbar-filters {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+  flex-wrap: wrap;
+  
+  mat-form-field {
+    min-width: 180px;
+    .mat-mdc-form-field-subscript-wrapper { display: none; }
+  }
+}
+
+.toolbar-spacer { flex: 1; }
+
+.nova-reserva {
+  background: var(--color-accent) !important;
+  color: white !important;
+  border-radius: var(--radius-md);
+  padding: 0 var(--spacing-lg);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: var(--color-accent-dark) !important;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+button[type="submit"] {
+  background: var(--color-primary);
+  color: white;
+  border-radius: var(--radius-md);
+  padding: 0 var(--spacing-lg);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: var(--color-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+mat-card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-light);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease-in-out;
+
+  &:hover { box-shadow: var(--shadow-md); }
+  .card-content { padding: 0; }
+}
+
+.custom-table {
+  width: 100%;
+  
+  .table-header {
+    background: var(--color-surface-variant);
+    border-bottom: 2px solid var(--color-accent);
+  }
+  
+  .table-row {
+    display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 2fr;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    align-items: center;
+    
+    &.data-row {
+      border-bottom: 1px solid var(--color-border-light);
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background: rgba(253, 126, 20, 0.05);
+        transform: translateX(2px);
+        border-left: 3px solid var(--color-accent);
+      }
+    }
+  }
+  
+  .table-cell {
+    &.header-cell {
+      color: var(--color-text-primary);
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    &.data-cell {
+      color: var(--color-text-secondary);
+      font-size: 0.875rem;
+      
+      &:first-child {
+        color: var(--color-text-primary);
+        font-weight: 500;
+      }
+    }
+    
+    &.actions-cell {
+      display: flex;
+      gap: var(--spacing-xs);
+      justify-content: flex-start;
+      
+      button {
+        min-width: 36px;
+        height: 36px;
+        border-radius: var(--radius-md);
+        transition: all 0.2s ease;
+        
+        &:hover { transform: scale(1.1); box-shadow: var(--shadow-sm); }
+        
+        &[color="primary"] {
+          background-color: rgba(0, 123, 255, 0.1);
+          color: var(--color-primary);
+          &:hover { background-color: rgba(0, 123, 255, 0.2); }
+        }
+        
+        &[color="accent"] {
+          background-color: rgba(253, 126, 20, 0.1);
+          color: var(--color-accent);
+          &:hover { background-color: rgba(253, 126, 20, 0.2); }
+        }
+        
+        &[color="warn"] {
+          background-color: rgba(220, 53, 69, 0.1);
+          color: var(--color-error);
+          &:hover { background-color: rgba(220, 53, 69, 0.2); }
+        }
+      }
+    }
+  }
+}
+
+.status-badge {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-xl);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  
+  &.status-pendente {
+    background: var(--color-warning-bg);
+    color: var(--color-warning);
+    border: 1px solid var(--color-warning-border);
+  }
+  
+  &.status-confirmada {
+    background: var(--color-primary-bg);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary-border);
+  }
+  
+  &.status-check_in {
+    background: var(--color-success-bg);
+    color: var(--color-success);
+    border: 1px solid var(--color-success-border);
+  }
+  
+  &.status-check_out {
+    background: var(--color-info-bg);
+    color: var(--color-info);
+    border: 1px solid var(--color-info-border);
+  }
+  
+  &.status-cancelada {
+    background: var(--color-error-bg);
+    color: var(--color-error);
+    border: 1px solid var(--color-error-border);
+  }
+}
+
+.table-container {
+  overflow-x: auto;
+  min-height: 200px;
+}

@@ -1,0 +1,211 @@
+// Modal theme override
+:host ::ng-deep .mat-mdc-dialog-container {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text-primary) !important;
+}
+
+:host ::ng-deep .mat-mdc-dialog-surface {
+  background-color: var(--color-surface) !important;
+}
+
+// Autocomplete dropdown override
+:host ::ng-deep .mat-mdc-autocomplete-panel {
+  background-color: var(--color-surface) !important;
+  border: 1px solid var(--color-border-light) !important;
+  
+  .mat-mdc-option {
+    background-color: var(--color-surface) !important;
+    color: var(--color-text-primary) !important;
+    
+    &:hover { background-color: var(--color-surface-variant) !important; }
+    &.mat-mdc-option-active {
+      background-color: var(--color-primary-50) !important;
+      color: var(--color-primary) !important;
+    }
+  }
+}
+
+// Calendar theme override
+:host ::ng-deep .mat-datepicker-popup .mat-datepicker-content {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text-primary) !important;
+  
+  .mat-calendar {
+    background-color: var(--color-surface) !important;
+    color: var(--color-text-primary) !important;
+    
+    .mat-calendar-header,
+    .mat-calendar-content {
+      background-color: var(--color-surface) !important;
+      color: var(--color-text-primary) !important;
+    }
+    
+    .mat-calendar-controls button {
+      color: var(--color-text-primary) !important;
+      &:hover { background-color: var(--color-surface-variant) !important; }
+    }
+    
+    .mat-calendar-table th { color: var(--color-text-secondary) !important; }
+    
+    .mat-calendar-body-cell {
+      color: var(--color-text-primary) !important;
+      border: none !important;
+      
+      &:hover { background-color: var(--color-surface-variant) !important; }
+      &.mat-calendar-body-selected {
+        background-color: var(--color-accent) !important;
+        color: white !important;
+      }
+      &.mat-calendar-body-today {
+        border: 2px solid var(--color-accent) !important;
+        &:not(.mat-calendar-body-selected) {
+          color: var(--color-accent) !important;
+          background-color: var(--color-surface) !important;
+        }
+      }
+      &.mat-calendar-body-disabled { color: var(--color-text-disabled) !important; }
+    }
+  }
+}
+
+// Override para datepicker toggle button
+:host ::ng-deep .mat-datepicker-toggle {
+  .mat-icon-button {
+    color: var(--color-text-secondary) !important;
+    
+    &:hover {
+      background-color: var(--color-surface-variant) !important;
+    }
+  }
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  min-width: 800px; // Aumentada de 600px para 800px
+  max-width: 900px;
+  padding: var(--spacing-md) 0;
+  background-color: var(--color-surface);
+}
+
+.full-width {
+  width: 100%;
+}
+
+.date-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+// Estilos para mat-form-field
+:host ::ng-deep mat-form-field {
+  &.mat-mdc-form-field {
+    .mat-mdc-form-field-subscript-wrapper {
+      display: none; // Remove espaço extra
+    }
+    
+    .mat-mdc-text-field-wrapper {
+      background-color: var(--color-surface) !important;
+      border-radius: var(--radius-md);
+    }
+    
+    .mat-mdc-form-field-focus-overlay {
+      background-color: var(--color-accent-50) !important;
+    }
+    
+    .mat-mdc-floating-label {
+      color: var(--color-text-secondary) !important;
+    }
+    
+    .mat-mdc-form-field-required-marker {
+      color: var(--color-error);
+    }
+    
+    // Input styling
+    .mat-mdc-input-element {
+      color: var(--color-text-primary) !important;
+      background-color: transparent !important;
+      
+      &::placeholder {
+        color: var(--color-text-muted) !important;
+        opacity: 0.7;
+      }
+    }
+  }
+}
+
+// Dialog styling com override mais específico
+:host ::ng-deep mat-dialog-content {
+  max-height: 600px;
+  overflow-y: auto;
+  background-color: var(--color-surface) !important;
+  color: var(--color-text-primary) !important;
+}
+
+:host ::ng-deep mat-dialog-actions {
+  padding: var(--spacing-md) 0;
+  gap: var(--spacing-sm);
+  background-color: var(--color-surface) !important;
+  
+  button {
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    padding: 0 var(--spacing-lg);
+    
+    &[mat-button] {
+      color: var(--color-text-secondary);
+      
+      &:hover {
+        background-color: var(--color-surface-variant);
+      }
+    }
+    
+    &[mat-raised-button] {
+      background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-light) 100%);
+      color: white;
+      
+      &:hover:not([disabled]) {
+        background: linear-gradient(135deg, var(--color-accent-dark) 0%, var(--color-accent) 100%);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+      }
+      
+      &[disabled] {
+        background: var(--color-text-disabled) !important;
+        color: white !important;
+      }
+    }
+  }
+}
+
+// Title styling
+:host ::ng-deep h2[mat-dialog-title] {
+  color: var(--color-text-primary) !important;
+  font-weight: 600;
+  margin: 0 0 var(--spacing-md) 0;
+  background-color: var(--color-surface) !important;
+}
+
+// Error messages
+:host ::ng-deep mat-error {
+  color: var(--color-error) !important;
+  font-size: 0.75rem;
+  margin-top: var(--spacing-xs);
+}
+
+// Checkbox styling para estacionamento
+.checkbox-container {
+  margin: 16px 0;
+  
+  mat-checkbox {
+    .pricing-info {
+      display: block;
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      margin-top: 4px;
+      font-style: italic;
+    }
+  }
+}

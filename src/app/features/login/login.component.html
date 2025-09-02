@@ -1,0 +1,43 @@
+<div class="login-page-wrapper login-container">
+  <div class="login-form-container">
+
+    <!-- Logo -->
+    <div class="logo-section">
+      <img src="assets/images/belavista-logo.png" alt="Bela Vista - Sistema de Gestão Hoteleiro" class="logo">
+    </div>
+
+    <p class="form-subtitle">Faça login para acessar o sistema</p>
+
+    <!-- Formulário -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+      <mat-form-field appearance="outline">
+        <mat-label>Login</mat-label>
+        <input matInput formControlName="login" required>
+        <mat-icon matSuffix>person_outline</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Senha</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="senha" required>
+        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+          <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <div class="error-message" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <button mat-flat-button color="primary" class="login-button" type="submit" [disabled]="loginForm.invalid || isLoading">
+        <ng-container *ngIf="!isLoading; else loadingSpinner">
+          ENTRAR
+        </ng-container>
+        <ng-template #loadingSpinner>
+          <mat-spinner [diameter]="24"></mat-spinner>
+        </ng-template>
+      </button>
+    </form>
+
+  </div>
+</div>

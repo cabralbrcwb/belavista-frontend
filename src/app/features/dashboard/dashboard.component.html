@@ -1,0 +1,78 @@
+<div class="dashboard-container" *ngIf="stats$ | async as stats; else loading">
+  <h1 class="dashboard-title">Dashboard - Hotel Bela Vista</h1>
+  <p class="subtitle">Bem-vindo ao sistema de gestão do hotel!</p>
+
+  <div class="cards-grid">
+    <!-- Card de Reservas -->
+    <mat-card class="kpi-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon class="kpi-icon">book</mat-icon>
+          Reservas
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="kpi-number">{{ getStats(stats).totalReservas }}</div>
+        <div class="kpi-label">Total de reservas</div>
+        <div class="kpi-details">
+          <small>{{ getStats(stats).reservasPendentes }} pendentes | {{ getStats(stats).checkinsAtivos }} ativas</small>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <a class="kpi-action-link" routerLink="/reservas">Ver Reservas</a>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Card de Hóspedes -->
+    <mat-card class="kpi-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon class="kpi-icon">people</mat-icon>
+          Hóspedes
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="kpi-number">{{ getStats(stats).totalHospedes }}</div>
+        <div class="kpi-label">Total de hóspedes</div>
+        <div class="kpi-details">
+          <small>{{ getStats(stats).checkinsAtivos }} ativos no momento</small>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <a class="kpi-action-link" routerLink="/hospedes">Ver Hóspedes</a>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Card de Status Rápido -->
+    <mat-card class="kpi-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon class="kpi-icon">dashboard</mat-icon>
+          Status
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="status-grid">
+          <div class="status-item">
+            <span class="status-number">{{ getStats(stats).reservasPendentes }}</span>
+            <span class="status-label">Pendentes</span>
+          </div>
+          <div class="status-item">
+            <span class="status-number">{{ getStats(stats).checkinsAtivos }}</span>
+            <span class="status-label">Check-ins</span>
+          </div>
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <a class="kpi-action-link" routerLink="/reservas">Ver Reservas</a>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="loading-container">
+    <mat-icon class="loading-icon">hourglass_empty</mat-icon>
+    <p>A carregar estatísticas do hotel...</p>
+  </div>
+</ng-template>

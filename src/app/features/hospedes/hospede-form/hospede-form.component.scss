@@ -1,0 +1,98 @@
+// Modal theme override
+:host ::ng-deep .mat-mdc-dialog-container {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text-primary) !important;
+}
+
+:host ::ng-deep .mat-mdc-dialog-surface {
+  background-color: var(--color-surface) !important;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  min-width: 550px;
+  max-width: 650px;
+  padding: var(--spacing-md) 0;
+  background-color: var(--color-surface);
+}
+
+.full-width { width: 100%; }
+
+// Form field styling
+:host ::ng-deep mat-form-field.mat-mdc-form-field {
+  .mat-mdc-form-field-subscript-wrapper { display: none; }
+  .mat-mdc-text-field-wrapper {
+    background-color: var(--color-surface) !important;
+    border-radius: var(--radius-md);
+  }
+  .mat-mdc-form-field-focus-overlay { background-color: var(--color-primary-50) !important; }
+  .mat-mdc-floating-label { color: var(--color-text-secondary) !important; }
+  .mat-mdc-form-field-required-marker { color: var(--color-error); }
+  
+  .mat-mdc-input-element {
+    color: var(--color-text-primary) !important;
+    background-color: transparent !important;
+    
+    &::placeholder {
+      color: var(--color-text-muted) !important;
+      opacity: 0.7;
+    }
+  }
+}
+
+// Dialog content and actions
+:host ::ng-deep mat-dialog-content {
+  max-height: 500px;
+  overflow-y: auto;
+  background-color: var(--color-surface) !important;
+  color: var(--color-text-primary) !important;
+}
+
+:host ::ng-deep mat-dialog-actions {
+  padding: var(--spacing-md) 0;
+  gap: var(--spacing-sm);
+  background-color: var(--color-surface) !important;
+  
+  button {
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    padding: 0 var(--spacing-lg);
+    
+    &[mat-button] {
+      color: var(--color-text-secondary);
+      &:hover { background-color: var(--color-surface-variant); }
+    }
+    
+    &[mat-raised-button] {
+      background: var(--color-primary);
+      color: white;
+      
+      &:hover:not([disabled]) {
+        background: var(--color-primary-dark);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+      }
+      
+      &[disabled] {
+        background: var(--color-text-disabled) !important;
+        color: white !important;
+      }
+    }
+  }
+}
+
+// Title and error styling
+:host ::ng-deep h2[mat-dialog-title] {
+  color: var(--color-text-primary) !important;
+  font-weight: 600;
+  margin: 0 0 var(--spacing-md) 0;
+  background-color: var(--color-surface) !important;
+}
+
+:host ::ng-deep mat-error {
+  color: var(--color-error) !important;
+  font-size: 0.75rem;
+  margin-top: var(--spacing-xs);
+}

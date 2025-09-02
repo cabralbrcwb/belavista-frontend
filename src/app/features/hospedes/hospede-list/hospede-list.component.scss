@@ -1,0 +1,206 @@
+.hospedes-container {
+  padding: var(--spacing-lg);
+  background-color: var(--color-background);
+  min-height: 100vh;
+}
+
+.page-header {
+  margin-bottom: var(--spacing-xl);
+  
+  h2 {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin: 0;
+    font-family: var(--font-family-sans);
+  }
+}
+
+.search-panel {
+  margin-bottom: var(--spacing-xl);
+  background-color: var(--color-surface);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.toolbar-filters {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+  flex-wrap: wrap;
+  
+  mat-form-field {
+    min-width: 200px;
+    
+    .mat-mdc-form-field-subscript-wrapper {
+      display: none;
+    }
+
+    // Remover placeholder duplicado
+    .mat-mdc-floating-label {
+      color: var(--color-text-secondary);
+    }
+    
+    .mat-mdc-form-field-focus-overlay {
+      background-color: var(--color-primary-50);
+    }
+  }
+}
+
+.toolbar-spacer {
+  flex: 1;
+}
+
+.novo-hospede {
+  background: linear-gradient(135deg, var(--color-success) 0%, var(--color-success-light) 100%) !important;
+  color: white !important;
+  border-radius: var(--radius-md);
+  padding: 0 var(--spacing-lg);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: linear-gradient(135deg, var(--color-success-dark) 0%, var(--color-success) 100%) !important;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  mat-icon {
+    margin-right: var(--spacing-xs);
+  }
+}
+
+button[type="submit"] {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+  color: white;
+  border-radius: var(--radius-md);
+  padding: 0 var(--spacing-lg);
+  font-weight: 500;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  mat-icon {
+    margin-right: var(--spacing-xs);
+  }
+}
+
+// Estilo do card principal
+mat-card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-light);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .card-content {
+    padding: 0;
+  }
+}
+
+// Tabela customizada com cores vivas
+.custom-table {
+  width: 100%;
+  
+  .table-header {
+    background: linear-gradient(135deg, var(--color-surface-variant) 0%, #f1f3f4 100%);
+    border-bottom: 2px solid var(--color-primary);
+  }
+  
+  .table-row {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1.5fr 2fr;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    align-items: center;
+    
+    &.data-row {
+      border-bottom: 1px solid var(--color-border-light);
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background: linear-gradient(135deg, rgba(0, 123, 255, 0.02) 0%, rgba(0, 123, 255, 0.05) 100%);
+        transform: translateX(2px);
+        border-left: 3px solid var(--color-primary);
+      }
+    }
+  }
+  
+  .table-cell {
+    &.header-cell {
+      color: var(--color-text-primary);
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    &.data-cell {
+      color: var(--color-text-secondary);
+      font-size: 0.875rem;
+      
+      &:first-child {
+        color: var(--color-text-primary);
+        font-weight: 500;
+      }
+    }
+
+    &.actions-cell {
+      display: flex;
+      gap: var(--spacing-xs);
+      justify-content: flex-start;
+      align-items: center;
+      
+      button {
+        min-width: 36px;
+        height: 36px;
+        border-radius: var(--radius-md);
+        transition: all 0.2s ease;
+        
+        &:hover {
+          transform: scale(1.1);
+          box-shadow: var(--shadow-sm);
+        }
+        
+        &[color="primary"] {
+          background-color: rgba(0, 123, 255, 0.1);
+          color: var(--color-primary);
+          
+          &:hover {
+            background-color: rgba(0, 123, 255, 0.2);
+          }
+        }
+        
+        &[color="warn"] {
+          background-color: rgba(220, 53, 69, 0.1);
+          color: var(--color-error);
+          
+          &:hover {
+            background-color: rgba(220, 53, 69, 0.2);
+          }
+        }
+        
+        mat-icon {
+          font-size: 18px;
+        }
+      }
+    }
+  }
+}
+
+// Loading spinner
+.table-container {
+  overflow-x: auto;
+  min-height: 200px;
+}

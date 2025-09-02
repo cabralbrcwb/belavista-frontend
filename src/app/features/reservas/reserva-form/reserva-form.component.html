@@ -1,0 +1,65 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Editar Reserva' : 'Nova Reserva' }}</h2>
+
+<form [formGroup]="reservaForm" (ngSubmit)="onSave()">
+  <mat-dialog-content>
+    <div class="form-container">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Hóspede</mat-label>
+        <input matInput 
+               placeholder="Selecione um Hóspede"
+               formControlName="hospede" 
+               [matAutocomplete]="hospedeAuto">
+        <mat-autocomplete #hospedeAuto="matAutocomplete" [displayWith]="displayHospede">
+          <mat-option *ngFor="let hospede of filteredHospedes | async" [value]="hospede">
+            {{ hospede.nome }} ({{ hospede.documento }})
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="reservaForm.get('hospede')?.invalid && reservaForm.get('hospede')?.touched">
+          {{ getErrorMessage('hospede') }}
+        </mat-error>
+      </mat-form-field>
+
+      <div class="date-row">
+        <mat-form-field appearance="outline">
+          <mat-label>Data de Entrada</mat-label>
+          <input matInput [matDatepicker]="entradaPicker" formControlName="dataEntrada">
+          <mat-datepicker-toggle matSuffix [for]="entradaPicker"></mat-datepicker-toggle>
+          <mat-datepicker #entradaPicker></mat-datepicker>
+          <mat-error *ngIf="reservaForm.get('dataEntrada')?.invalid && reservaForm.get('dataEntrada')?.touched">
+            {{ getErrorMessage('dataEntrada') }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Data de Saída</mat-label>
+          <input matInput [matDatepicker]="saidaPicker" formControlName="dataSaidaPrevista">
+          <mat-datepicker-toggle matSuffix [for]="saidaPicker"></mat-datepicker-toggle>
+          <mat-datepicker #saidaPicker></mat-datepicker>
+          <mat-error *ngIf="reservaForm.get('dataSaidaPrevista')?.invalid && reservaForm.get('dataSaidaPrevista')?.touched">
+            {{ getErrorMessage('dataSaidaPrevista') }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Campo para estacionamento -->
+      <div class="checkbox-container">
+        <mat-checkbox formControlName="adicionalVeiculo">
+          Necessita vaga de estacionamento
+          <span class="pricing-info">(Segunda a Sexta: +R$ 15,00 | Fim de semana: +R$ 20,00)</span>
+        </mat-checkbox>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Observações</mat-label>
+        <textarea matInput formControlName="observacoes" rows="3"></textarea>
+      </mat-form-field>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onCancel()">Cancelar</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="reservaForm.invalid">
+      {{ isEdit ? 'Salvar' : 'Criar' }}
+    </button>
+  </mat-dialog-actions>
+</form>

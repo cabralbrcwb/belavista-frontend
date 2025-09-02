@@ -1,0 +1,1074 @@
+/* Sistema de Gestão Hoteleira - Design Moderno */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+html, body { 
+  height: 100%; 
+  margin: 0;
+  padding: 0;
+}
+
+body { 
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background-color: #F8F9FA; // Fundo cinza claro para destacar cards
+  color: #343A40; // Texto principal grafite
+  line-height: 1.6;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Paleta Inspirada em Plataformas de Hospedagem Modernas */
+:root {
+  /* Primária - Azul Booking (confiança e profissionalismo) */
+  --color-primary: #007BFF;           /* Azul principal (confiança, ações primárias) */
+  --color-primary-light: #409CFF;     /* Azul claro para hover */
+  --color-primary-dark: #0056b3;      /* Azul escuro para pressed */
+  --color-primary-50: #E6F2FF;        /* Azul muito claro para backgrounds */
+  
+  /* Sucesso - Verde (confirmações, disponibilidade) */
+  --color-success: #28A745;           /* Verde sucesso moderno */
+  --color-success-light: #52bA73;
+  --color-success-dark: #208538;
+  
+  /* Acento/Alerta - Laranja (ações importantes, call-to-action, manutenção) */
+  --color-accent: #FD7E14;            /* Laranja vibrante para ações e alertas */
+  --color-accent-light: #FD9843;
+  --color-accent-dark: #D9680E;
+  
+  /* Backgrounds - Leve e limpo */
+  --color-background: #F8F9FA;        /* Fundo principal suave */
+  --color-surface: #FFFFFF;           /* Cards e componentes */
+  --color-surface-variant: #F8F9FA;   /* Hover states, cabeçalhos de tabela */
+  --color-surface-elevated: #FFFFFF;  /* Modais, dropdowns */
+  
+  /* Textos - Hierarquia clara */
+  --color-text-primary: #343A40;      /* Texto principal (grafite) */
+  --color-text-secondary: #6C757D;    /* Texto secundário e placeholders */
+  --color-text-muted: #6C757D;        /* Texto auxiliar */
+  --color-text-disabled: #ADB5BD;     /* Texto desabilitado */
+  
+  /* Bordas - Sistema de elevação sutil */
+  --color-border-light: #DEE2E6;      /* Bordas muito suaves */
+  --color-border: #CED4DA;            /* Bordas padrão */
+  --color-border-medium: #ADB5BD;     /* Bordas com mais contraste */
+  --color-border-focus: var(--color-primary); /* Bordas em foco */
+  
+  /* Status Colors - Semântica clara */
+  --color-success-bg: #EAF6EC;        /* Background verde claro */
+  --color-success-border: #A3D9B1;    /* Borda verde suave */
+  
+  --color-warning: var(--color-accent); /* Laranja manutenção/aviso */
+  --color-warning-bg: #FFF2E7;        /* Background laranja claro */
+  --color-warning-border: #FED4B1;    /* Borda laranja suave */
+  
+  --color-error: #DC3545;             /* Vermelho para erros críticos */
+  --color-error-bg: #FEF2F2;          /* Background vermelho claro */
+  --color-error-border: #FECACA;      /* Borda vermelha suave */
+  
+  --color-info: var(--color-primary); /* Azul informação */
+  --color-info-bg: var(--color-primary-50);
+  --color-info-border: #93C5FD;
+  
+  /* Shadows - Elevação moderna */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  /* Border Radius - Arredondamento moderno */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  
+  /* Spacing - Sistema consistente */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+}
+
+// --- Classes Utilitárias Específicas para o Tema do Hotel ---
+
+// Classes para textos semânticos
+.text-success {
+  color: #28A745 !important;
+}
+
+.text-warning {
+  color: #FD7E14 !important;
+}
+
+.text-primary {
+  color: #007BFF !important;
+}
+
+.text-secondary {
+  color: #6C757D !important;
+}
+
+.text-muted {
+  color: #6C757D !important;
+}
+
+// Classes para backgrounds
+.bg-light {
+  background-color: #F8F9FA !important;
+}
+
+.bg-white {
+  background-color: #FFFFFF !important;
+}
+
+// Customizações específicas para cards
+.hotel-card {
+  background: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  border: 1px solid #DEE2E6;
+  
+  &:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+    transition: all 0.2s ease-in-out;
+  }
+}
+
+// Customizações para formulários
+.form-field-modern {
+  .mat-mdc-form-field-input-control::placeholder {
+    color: #6C757D !important;
+    opacity: 1 !important;
+  }
+  
+  .mat-mdc-form-field-label {
+    color: #6C757D !important;
+  }
+}
+
+/* Typography System - Hierarquia clara para gestão hoteleira */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--color-text-primary);
+  margin: 0 0 var(--spacing-md) 0;
+}
+
+h1 { font-size: 2.25rem; font-weight: 700; } /* Títulos principais */
+h2 { font-size: 1.875rem; font-weight: 600; } /* Seções importantes */
+h3 { font-size: 1.5rem; font-weight: 600; }   /* Subsções */
+h4 { font-size: 1.25rem; font-weight: 500; }  /* Cards titles */
+h5 { font-size: 1.125rem; font-weight: 500; } /* Subtítulos */
+h6 { font-size: 1rem; font-weight: 500; }     /* Labels grandes */
+
+p {
+  margin: 0 0 var(--spacing-md) 0;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+small {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+}
+
+/* Angular Material Component Overrides - Cores customizadas */
+
+// Customização de botões primários
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-unelevated-button.mat-primary,
+.mat-mdc-outlined-button.mat-primary {
+  --mdc-filled-button-container-color: #007BFF !important;
+  --mdc-filled-button-label-text-color: #FFFFFF !important;
+  --mdc-outlined-button-outline-color: #007BFF !important;
+  --mdc-outlined-button-label-text-color: #007BFF !important;
+}
+
+.mat-mdc-raised-button.mat-primary:hover,
+.mat-mdc-unelevated-button.mat-primary:hover {
+  --mdc-filled-button-container-color: #0056b3 !important;
+}
+
+// Customização de botões accent (laranja)
+.mat-mdc-raised-button.mat-accent,
+.mat-mdc-unelevated-button.mat-accent {
+  --mdc-filled-button-container-color: #FD7E14 !important;
+  --mdc-filled-button-label-text-color: #FFFFFF !important;
+}
+
+.mat-mdc-raised-button.mat-accent:hover,
+.mat-mdc-unelevated-button.mat-accent:hover {
+  --mdc-filled-button-container-color: #D9680E !important;
+}
+
+// Customização de form fields
+.mat-mdc-form-field {
+  --mdc-filled-text-field-focus-active-indicator-color: #007BFF !important;
+  --mdc-filled-text-field-focus-label-text-color: #007BFF !important;
+  --mdc-outlined-text-field-focus-outline-color: #007BFF !important;
+  --mdc-outlined-text-field-focus-label-text-color: #007BFF !important;
+}
+
+.mat-mdc-form-field .mdc-floating-label {
+  color: #6C757D !important;
+}
+
+.mat-mdc-form-field input::placeholder {
+  color: #6C757D !important;
+  opacity: 0.7 !important;
+}
+
+// Corrige problemas de sobreposição do placeholder/label nos form fields outline
+.mat-mdc-form-field-appearance-outline {
+  .mdc-notched-outline {
+    border-color: #CED4DA !important;
+  }
+  
+  &.mat-focused .mdc-notched-outline {
+    border-color: #007BFF !important;
+    border-width: 2px !important;
+  }
+  
+  // Ajusta o input para usar apenas placeholder
+  .mat-mdc-form-field-input-control {
+    color: #343A40 !important;
+    padding: 16px 12px !important;
+    
+    &::placeholder {
+      color: #6C757D !important;
+      opacity: 0.8 !important;
+      font-size: 16px !important;
+    }
+  }
+  
+  // Ajusta a altura do form field
+  .mat-mdc-text-field-wrapper {
+    height: 56px !important;
+    align-items: center !important;
+  }
+}
+
+/* Angular Material Component Overrides - Estilo Booking.com */
+.mat-toolbar {
+  background: var(--color-surface) !important;
+  color: var(--color-text-primary) !important;
+  box-shadow: var(--shadow-sm) !important;
+  border-bottom: 1px solid var(--color-border-light) !important;
+  height: 64px !important;
+  padding: 0 var(--spacing-lg) !important;
+  backdrop-filter: blur(8px);
+}
+
+.mat-toolbar h1 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.mat-toolbar button {
+  color: var(--color-text-secondary) !important;
+  transition: all 0.2s ease;
+}
+
+.mat-toolbar .mat-icon {
+  color: var(--color-text-secondary) !important;
+}
+
+.mat-toolbar .mat-icon-button:hover {
+  background-color: var(--color-surface-variant) !important;
+  transform: scale(1.05);
+}
+
+/* Cards - Estilo moderno inspirado em Airbnb */
+.mat-card {
+  background-color: var(--color-surface) !important;
+  border-radius: var(--radius-lg) !important;
+  border: 1px solid var(--color-border-light) !important;
+  box-shadow: var(--shadow-sm) !important;
+  padding: var(--spacing-lg) !important;
+  margin: 0 !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mat-card:hover {
+  border-color: var(--color-border) !important;
+  box-shadow: var(--shadow-lg) !important;
+  transform: translateY(-2px);
+}
+
+.mat-card-title {
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
+  color: var(--color-text-primary) !important;
+  margin-bottom: var(--spacing-sm) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+.mat-card-subtitle {
+  color: var(--color-text-secondary) !important;
+  font-size: 0.875rem !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+.mat-card-content {
+  color: var(--color-text-secondary) !important;
+  line-height: 1.6;
+}
+
+/* Buttons - Sistema inspirado em Booking.com e Airbnb */
+.mat-raised-button.mat-primary, .mat-flat-button.mat-primary {
+  background-color: var(--color-primary) !important;
+  color: #FFFFFF !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-sm) !important;
+  font-weight: 600 !important;
+  padding: 0 var(--spacing-lg) !important;
+  height: 44px !important;
+  line-height: 44px !important;
+  font-family: 'Inter', sans-serif !important;
+  text-transform: none !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mat-raised-button.mat-primary:hover, .mat-flat-button.mat-primary:hover {
+  background-color: var(--color-primary-dark) !important;
+  box-shadow: var(--shadow-md) !important;
+  transform: translateY(-1px);
+}
+
+.mat-raised-button.mat-accent, .mat-flat-button.mat-accent {
+  background-color: var(--color-accent) !important;
+  color: #FFFFFF !important;
+}
+
+.mat-raised-button.mat-accent:hover, .mat-flat-button.mat-accent:hover {
+  background-color: var(--color-accent-dark) !important;
+}
+
+.mat-stroked-button {
+  border: 1.5px solid var(--color-border-medium) !important;
+  color: var(--color-text-primary) !important;
+  border-radius: var(--radius-md) !important;
+  font-weight: 500 !important;
+  height: 44px !important;
+  line-height: 41px !important;
+  font-family: 'Inter', sans-serif !important;
+  text-transform: none !important;
+  transition: all 0.2s ease;
+}
+
+.mat-stroked-button:hover {
+  background-color: var(--color-surface-variant) !important;
+  border-color: var(--color-primary) !important;
+  color: var(--color-primary) !important;
+  transform: translateY(-1px);
+}
+
+.mat-icon-button {
+  color: var(--color-text-secondary) !important;
+  width: 44px !important;
+  height: 44px !important;
+  line-height: 44px !important;
+  border-radius: var(--radius-md) !important;
+  transition: all 0.2s ease;
+}
+
+.mat-icon-button:hover {
+  background-color: var(--color-surface-variant) !important;
+  color: var(--color-primary) !important;
+  transform: scale(1.1);
+}
+
+/* Navigation - Sidebar estilo moderno */
+.mat-drawer {
+  background-color: var(--color-surface) !important;
+  border-right: 1px solid var(--color-border-light) !important;
+  width: 280px !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.mat-drawer-content {
+  background-color: var(--color-background) !important;
+}
+
+.mat-list-item {
+  color: var(--color-text-secondary) !important;
+  font-weight: 400 !important;
+  height: 48px !important;
+  border-radius: var(--radius-md) !important;
+  margin: 2px var(--spacing-sm) !important;
+  font-family: 'Inter', sans-serif !important;
+  transition: all 0.2s ease;
+}
+
+.mat-list-item:hover {
+  background-color: var(--color-primary-50) !important;
+  color: var(--color-primary) !important;
+  transform: translateX(4px);
+}
+
+.mat-list-item.active {
+  background-color: var(--color-primary-50) !important;
+  color: var(--color-primary) !important;
+  font-weight: 600 !important;
+  border-left: 3px solid var(--color-primary);
+}
+
+.mat-list-item .mat-icon {
+  color: var(--color-text-muted) !important;
+  margin-right: var(--spacing-md) !important;
+  transition: color 0.2s ease;
+}
+
+.mat-list-item:hover .mat-icon,
+.mat-list-item.active .mat-icon {
+  color: var(--color-primary) !important;
+}
+
+/* Forms - Outlined Fields com rótulo sólido (estilo Booking.com) */
+.mat-form-field {
+  width: 100%;
+  font-family: 'Inter', sans-serif !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: var(--color-border) !important;
+  transition: color 0.2s ease;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-outline-thick {
+  color: var(--color-primary) !important;
+  border-width: 2px !important;
+}
+
+.mat-form-field-appearance-outline:not(.mat-form-field-disabled) .mat-form-field-flex:hover .mat-form-field-outline {
+  color: var(--color-border-medium) !important;
+}
+
+.mat-form-field-label {
+  color: var(--color-text-muted) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 400 !important;
+}
+
+.mat-form-field.mat-focused .mat-form-field-label {
+  color: var(--color-primary) !important;
+}
+
+.mat-input-element {
+  color: var(--color-text-primary) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 400 !important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-wrapper {
+  padding-bottom: 0 !important;
+}
+
+/* Rótulo com fundo sólido quando flutuando - SOLUÇÃO MODERNA */
+.mat-mdc-form-field .mdc-floating-label--float-above {
+  background-color: var(--color-surface) !important;
+  padding: 0 4px !important;
+  z-index: 1 !important;
+  border-radius: var(--radius-xs) !important;
+}
+
+/* Compatibilidade com Angular Material mais antigo */
+.mat-form-field-appearance-outline .mat-form-field-label.mat-form-field-float.mat-form-field-can-float {
+  background-color: var(--color-surface) !important;
+  padding: 0 4px !important;
+  margin: 0 -4px !important;
+}
+
+/* Menu Dropdown */
+.mat-menu-panel {
+  background-color: var(--color-surface-elevated) !important;
+  border: 1px solid var(--color-border-light) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-xl) !important;
+  backdrop-filter: blur(12px);
+}
+
+.mat-menu-item {
+  color: var(--color-text-secondary) !important;
+  font-family: 'Inter', sans-serif !important;
+  height: 44px !important;
+  transition: all 0.2s ease;
+}
+
+.mat-menu-item:hover {
+  background-color: var(--color-primary-50) !important;
+  color: var(--color-primary) !important;
+}
+
+/* Chips - Status coloridos para gestão hoteleira */
+.mat-chip {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  padding: 6px 12px !important;
+  border-radius: var(--radius-sm) !important;
+  border: 1px solid transparent !important;
+  transition: all 0.2s ease;
+}
+
+/* Status Padrão */
+.mat-chip:not([class*="status-"]) {
+  background-color: var(--color-surface-variant) !important;
+  color: var(--color-text-secondary) !important;
+  border-color: var(--color-border) !important;
+}
+
+/* Tables - Estilo limpo para listagens */
+.mat-table {
+  background-color: var(--color-surface) !important;
+  border-radius: var(--radius-lg) !important;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.mat-header-row {
+  background-color: var(--color-surface-variant) !important;
+}
+
+.mat-header-cell {
+  color: var(--color-text-secondary) !important;
+  font-weight: 600 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.75rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  border-bottom: 1px solid var(--color-border-light) !important;
+}
+
+.mat-row {
+  transition: background-color 0.2s ease;
+}
+
+.mat-row:hover {
+  background-color: var(--color-primary-50) !important;
+}
+
+.mat-cell {
+  color: var(--color-text-secondary) !important;
+  font-family: 'Inter', sans-serif !important;
+  border-bottom: 1px solid var(--color-border-light) !important;
+}
+
+/* Utility Classes - Helpers para desenvolvimento */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+}
+
+.page-header {
+  padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border-light);
+  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-variant) 100%);
+}
+
+.page-content {
+  padding: var(--spacing-lg);
+}
+
+/* Status Badges para Gestão Hoteleira */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.status-badge.disponivel {
+  background-color: var(--color-success-bg);
+  color: var(--color-success);
+  border: 1px solid var(--color-success-border);
+}
+
+.status-badge.ocupado {
+  background-color: var(--color-error-bg);
+  color: var(--color-error);
+  border: 1px solid var(--color-error-border);
+}
+
+.status-badge.manutencao {
+  background-color: var(--color-warning-bg);
+  color: var(--color-warning);
+  border: 1px solid var(--color-warning-border);
+}
+
+/* Loading States */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-3xl);
+  color: var(--color-text-secondary);
+  font-family: 'Inter', sans-serif;
+}
+
+.loading-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--color-border-light);
+  border-top: 3px solid var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--spacing-lg);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Scrollbar personalizada - Estilo moderno */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface-variant);
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-medium);
+  border-radius: var(--radius-sm);
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary);
+}
+
+/* Animations - Micro-interações */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.3s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+/* Responsive Design - Mobile First */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 var(--spacing-md);
+  }
+  
+  .card-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+  }
+  
+  .page-header {
+    padding: var(--spacing-lg) var(--spacing-md) var(--spacing-md);
+  }
+  
+  .mat-drawer {
+    width: 240px !important;
+  }
+  
+  h1 { font-size: 1.75rem; }
+  h2 { font-size: 1.5rem; }
+  h3 { font-size: 1.25rem; }
+}
+
+/* === CUSTOMIZAÇÕES ESPECÍFICAS PARA O SISTEMA HOTELEIRO === */
+
+/* 1. TELA DE LOGIN - Melhor contraste e acessibilidade */
+.login-container {
+  .mat-mdc-card {
+    background: #FFFFFF !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+    border: 1px solid #DEE2E6 !important;
+    border-radius: 12px !important;
+  }
+  
+  .mat-mdc-form-field {
+    .mat-mdc-floating-label {
+      color: #6C757D !important;
+    }
+    
+    .mat-mdc-form-field-input-control::placeholder {
+      color: #6C757D !important;
+      opacity: 1 !important;
+    }
+    
+    .mat-mdc-form-field-input-control {
+      color: #000000 !important; // Texto do input em preto
+    }
+    
+    .mat-mdc-text-field-wrapper {
+      background-color: #FFFFFF !important;
+    }
+    
+    input {
+      color: #000000 !important; // Garantindo que o texto do input seja preto
+    }
+  }
+  
+  .mat-mdc-raised-button.mat-primary {
+    background-color: #007BFF !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    
+    &:hover {
+      background-color: #0056b3 !important;
+    }
+  }
+}
+
+/* 2. DASHBOARD - Hierarquia visual clara */
+.dashboard-container {
+  h1, h2, h3 {
+    color: #343A40 !important;
+    font-weight: 600 !important;
+  }
+  
+  .dashboard-title {
+    font-size: 2rem !important;
+    font-weight: 700 !important;
+    color: #343A40 !important;
+    margin-bottom: 24px !important;
+  }
+  
+  .kpi-card {
+    background: #FFFFFF !important;
+    border: 1px solid #DEE2E6 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+    }
+    
+    .kpi-icon {
+      color: #007BFF !important;
+      font-size: 2rem !important;
+    }
+    
+    .kpi-number {
+      font-size: 2.5rem !important;
+      font-weight: 700 !important;
+      color: #343A40 !important;
+    }
+    
+    .kpi-label {
+      color: #6C757D !important;
+      font-weight: 500 !important;
+    }
+    
+    .kpi-action-link {
+      color: #007BFF !important;
+      text-decoration: none !important;
+      font-weight: 500 !important;
+      
+      &:hover {
+        color: #0056b3 !important;
+        text-decoration: underline !important;
+      }
+    }
+  }
+}
+
+/* 3. GERENCIAMENTO DE HÓSPEDES - Tema claro moderno */
+.hospedes-container {
+  .page-header {
+    background: #FFFFFF !important;
+    border: 1px solid #DEE2E6 !important;
+    border-radius: 8px !important;
+    padding: 20px !important;
+    margin-bottom: 24px !important;
+    
+    h2 {
+      color: #343A40 !important;
+      font-size: 1.75rem !important;
+      font-weight: 600 !important;
+      margin: 0 !important;
+    }
+  }
+  
+  .search-panel {
+    background: #FFFFFF !important;
+    border: 1px solid #DEE2E6 !important;
+    border-radius: 8px !important;
+    padding: 20px !important;
+    margin-bottom: 24px !important;
+    
+    .mat-mdc-form-field {
+      .mat-mdc-floating-label {
+        color: #6C757D !important;
+      }
+      
+      .mat-mdc-form-field-input-control::placeholder {
+        color: #6C757D !important;
+        opacity: 0.7 !important;
+      }
+      
+      .mat-mdc-form-field-input-control {
+        color: #343A40 !important;
+      }
+      
+      // Corrige o posicionamento do label/placeholder
+      &.mat-mdc-form-field-appearance-outline {
+        .mdc-notched-outline {
+          border-color: #CED4DA !important;
+        }
+        
+        &.mat-focused .mdc-notched-outline {
+          border-color: #007BFF !important;
+        }
+        
+        .mdc-floating-label {
+          color: #6C757D !important;
+        }
+        
+        &.mat-focused .mdc-floating-label {
+          color: #007BFF !important;
+        }
+      }
+    }
+    
+    .mat-mdc-raised-button {
+      &.mat-primary {
+        background-color: #007BFF !important;
+        
+        &:hover {
+          background-color: #0056b3 !important;
+        }
+      }
+    }
+    
+    .mat-mdc-raised-button.novo-hospede {
+      background-color: #FD7E14 !important;
+      color: #FFFFFF !important;
+      
+      &:hover {
+        background-color: #D9680E !important;
+      }
+    }
+  }
+  
+  .mat-mdc-table,
+  .custom-table {
+    background: #FFFFFF !important;
+    border: 0.5px solid #E9ECEF !important; // Borda cinza bem clara e bem fina
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    box-shadow: none !important; // Remove qualquer sombra
+    
+    // Remove bordas adicionais que possam estar sendo aplicadas
+    outline: none !important;
+    
+    .mat-mdc-header-row {
+      background-color: #F8F9FA !important;
+      border: none !important;
+      
+      .mat-mdc-header-cell {
+        color: #343A40 !important;
+        font-weight: 600 !important;
+        border-bottom: 1px solid #E9ECEF !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-top: none !important;
+      }
+    }
+    
+    .mat-mdc-row {
+      border: none !important;
+      border-bottom: 1px solid #F8F9FA !important;
+      
+      &:hover {
+        background-color: #F8F9FA !important;
+      }
+      
+      .mat-mdc-cell {
+        color: #343A40 !important;
+        border-bottom: 1px solid #F8F9FA !important;
+        border-left: none !important;
+        border-right: none !important;
+        border-top: none !important;
+      }
+    }
+  }
+  
+  // Força a remoção de qualquer borda escura que possa estar sendo aplicada
+  .hospedes-container .mat-mdc-table,
+  .hospedes-container .custom-table,
+  table.mat-mdc-table,
+  table.custom-table {
+    border: 0.5px solid #E9ECEF !important;
+    box-shadow: none !important;
+    outline: none !important;
+  }
+
+  // Sobrescreve qualquer estilo de elevação do Material
+  .mat-elevation-z1, .mat-elevation-z2, .mat-elevation-z3, .mat-elevation-z4,
+  .mat-elevation-z5, .mat-elevation-z6, .mat-elevation-z7, .mat-elevation-z8 {
+    box-shadow: none !important;
+    border: 0.5px solid #E9ECEF !important;
+  }
+}
+
+/* 5. PERSONALIZAÇÃO DOS COMPONENTES MATERIAL */
+
+/* Customizações gerais para melhor acessibilidade */
+.mat-mdc-form-field.mat-focused {
+  .mat-mdc-floating-label {
+    color: #007BFF !important;
+  }
+}
+
+.mat-mdc-select-panel {
+  background: #FFFFFF !important;
+  border: 1px solid #DEE2E6 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Acessibilidade - Melhor contraste e focabilidade */
+button:focus-visible,
+.mat-button:focus-visible,
+.mat-icon-button:focus-visible {
+  outline: 2px solid var(--color-primary) !important;
+  outline-offset: 2px !important;
+}
+
+.mat-form-field.mat-focused .mat-form-field-outline-thick {
+  border-width: 2px !important;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --color-border: #000000;
+    --color-text-primary: #000000;
+    --color-text-secondary: #333333;
+  }
+}
+
+/* Estilos para Notificações (Snackbars) */
+.success-snackbar {
+  background-color: var(--color-success) !important;
+  color: white !important;
+  
+  .mat-mdc-snack-bar-action {
+    color: white !important;
+    font-weight: 500;
+  }
+  
+  .mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled) {
+    color: white !important;
+  }
+}
+
+.error-snackbar {
+  background-color: #DC3545 !important;
+  color: white !important;
+  
+  .mat-mdc-snack-bar-action {
+    color: white !important;
+    font-weight: 500;
+  }
+  
+  .mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled) {
+    color: white !important;
+  }
+}
+
+.warning-snackbar {
+  background-color: var(--color-accent) !important;
+  color: white !important;
+  
+  .mat-mdc-snack-bar-action {
+    color: white !important;
+    font-weight: 500;
+  }
+  
+  .mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled) {
+    color: white !important;
+  }
+}
+
+.info-snackbar {
+  background-color: var(--color-primary) !important;
+  color: white !important;
+  
+  .mat-mdc-snack-bar-action {
+    color: white !important;
+    font-weight: 500;
+  }
+  
+  .mat-mdc-button.mat-mdc-snack-bar-action:not(:disabled) {
+    color: white !important;
+  }
+}
+
+/* Estilo geral para todas as snackbars */
+.mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-shape: 8px;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  
+  .mat-mdc-snack-bar-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.4;
+  }
+  
+  .mat-mdc-snack-bar-action {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}

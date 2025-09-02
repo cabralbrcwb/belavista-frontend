@@ -1,0 +1,82 @@
+<div class="hospedes-container">
+  <div class="page-header">
+    <h2>Gerenciamento de Hóspedes</h2>
+  </div>
+
+  <div class="search-panel">
+    <form [formGroup]="searchForm" (ngSubmit)="buscarHospedes()">
+      <div class="toolbar-filters">
+        <mat-form-field appearance="outline">
+          <mat-label>Nome</mat-label>
+          <input matInput formControlName="nome">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Doc. (RG, CPF, Passport, CNH)</mat-label>
+          <input matInput formControlName="documento">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Telefone</mat-label>
+          <input matInput formControlName="telefone">
+        </mat-form-field>
+
+        <span class="toolbar-spacer"></span>
+
+        <button mat-flat-button color="primary" type="submit">
+          <mat-icon>search</mat-icon>
+          Pesquisar
+        </button>
+
+        <button mat-raised-button class="novo-hospede" type="button" (click)="abrirFormularioNovoHospede()">
+          <mat-icon>add</mat-icon>
+          Novo Hóspede
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <mat-card>
+    <mat-card-content class="card-content">
+      <div class="table-container">
+        <ng-container *ngIf="hospedes$ | async as hospedes; else loading">
+          <div class="custom-table">
+            <!-- Cabeçalho da tabela -->
+            <div class="table-header">
+              <div class="table-row header-row">
+                <div class="table-cell header-cell">NOME</div>
+                <div class="table-cell header-cell">DOC. (RG, CPF, PASSPORT, CNH)</div>
+                <div class="table-cell header-cell">TELEFONE</div>
+                <div class="table-cell header-cell">AÇÕES</div>
+              </div>
+            </div>
+            
+            <!-- Corpo da tabela -->
+            <div class="table-body">
+              <div class="table-row data-row" *ngFor="let hospede of hospedes">
+                <div class="table-cell data-cell">{{ hospede.nome }}</div>
+                <div class="table-cell data-cell">{{ hospede.documento }}</div>
+                <div class="table-cell data-cell">{{ hospede.telefone }}</div>
+                <div class="table-cell data-cell actions-cell">
+                  <button mat-icon-button color="primary" (click)="editarHospede(hospede)" matTooltip="Editar">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button color="warn" (click)="excluirHospede(hospede)" matTooltip="Excluir">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Template de Carregamento -->
+        <ng-template #loading>
+          <div style="display: flex; justify-content: center; padding: 40px;">
+            <mat-spinner></mat-spinner>
+          </div>
+        </ng-template>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
