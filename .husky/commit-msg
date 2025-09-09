@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+# Valida mensagem de commit: deve estar em português (caracteres acentuados ou palavras comuns)
+# e seguir prefixo de tipo definido no cz-config (feat|fix|chore|refactor|perf|docs|style|build|ci|revert)
+
+msgFile=$1
+msg=$(head -n1 "$msgFile")
+
+# Permitir merge commits / revert / version bumps
+case "$msg" in
+  Merge*|Revert*|v[0-9]* )
+    exit 0;;
+esac
+
+tipoRegex='^(feat|fix|chore|refactor|perf|docs|style|build|ci|revert)(\(.+\))?: '
+
+if ! printf '%s' "$msg" | grep -Eq "$tipoRegex"; then
+  echo "Mensagem inválida: deve iniciar com tipo válido (feat|fix|chore|refactor|perf|docs|style|build|ci|revert)." >&2
+  exit 1
+fi
+# Heurística simples de português: presença de ao menos uma palavra comum ou acentuação
+if ! printf '%s' "$msg" | grep -Ei '(ação|corrig|adicion|remov|melhor|atualiz|cria|valida|implement|desempenho|layout|interface|usuário|dados|erro|reserv|hósped|fatura|checkout|entrada|saída|ç|á|é|í|ó|ú|ã|õ)' >/dev/null; then
+  echo "Mensagem parece não estar em português. Utilize termos em PT-BR." >&2
+  exit 1
+fi
+exit 0

@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test --watch=false",
     "dump:src": "node ./scripts/dump-src.mjs",
-    "commit": "cz"
+  "commit": "cz",
+  "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
@@ -33,6 +34,7 @@
     "@types/jasmine": "~5.1.0",
     "commitizen": "^4.3.1",
     "cz-customizable": "^7.5.1",
+  "husky": "^9.0.0",
     "jasmine-core": "~5.2.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
