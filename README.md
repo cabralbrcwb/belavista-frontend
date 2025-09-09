@@ -103,3 +103,28 @@ npm run lint       # Verificar código
 ### 👨‍💻 Autor
 
 Desenvolvido com ❤️ por **Daniel Silva**.
+
+## 🚀 Endpoints da API
+
+A seguir, a lista de endpoints disponíveis na aplicação.
+
+### 🧍‍♂️ Módulo de Hóspedes
+
+| Método | Endpoint | Descrição |
+| :--- | :--- | :--- |
+| `POST` | `/api/hospedes` | Cria um novo hóspede. Requer um corpo de requisição com os dados do hóspede. |
+| `GET` | `/api/hospedes` | Lista todos os hóspedes ou busca por `nome`, `documento`, ou `telefone`. |
+| `GET` | `/api/hospedes/{id}` | Busca um hóspede específico pelo seu ID. |
+| `PUT` | `/api/hospedes/{id}` | Atualiza os dados de um hóspede existente. |
+| `DELETE` | `/api/hospedes/{id}` | Remove um hóspede. A operação é bloqueada se o hóspede tiver reservas ativas. |
+
+### 🛏️ Módulo de Reservas
+
+| Método | Endpoint | Descrição |
+| :--- | :--- | :--- |
+| `POST` | `/api/reservas` | Cria uma nova reserva para um hóspede. Requer o ID do hóspede e as datas de entrada/saída. |
+| `POST` | `/api/reservas/{id}/check-in` | Realiza o check-in de uma reserva `PENDENTE`. |
+| `POST` | `/api/reservas/{id}/check-out` | Realiza o check-out de uma reserva com status `CHECK_IN` e retorna a fatura detalhada. |
+| `GET` | `/api/reservas` | Lista todas as reservas ou filtra por status (`PENDENTE`, `CHECK_IN`, `CHECK_OUT`, `CANCELADA`). |
+| `DELETE` | `/api/reservas/{id}` | Cancela uma reserva que ainda está com o status `PENDENTE`. |
+

@@ -18,7 +18,7 @@ if ! printf '%s' "$msg" | grep -Eq "$tipoRegex"; then
   exit 1
 fi
 # Heurística simples de português: presença de ao menos uma palavra comum ou acentuação
-if ! printf '%s' "$msg" | grep -Ei '(ação|corrig|adicion|remov|melhor|atualiz|cria|valida|implement|desempenho|layout|interface|usuário|dados|erro|reserv|hósped|fatura|checkout|entrada|saída|ç|á|é|í|ó|ú|ã|õ)' >/dev/null; then
+if ! printf '%s' "$msg" | grep -Ei '(ação|corrig|ajust|adicion|remov|melhor|atualiz|cria|valida|implement|desempenho|layout|interface|usuário|dados|erro|reserv|hósped|fatura|checkout|entrada|saída|ç|á|é|í|ó|ú|ã|õ)' >/dev/null; then
   echo "Mensagem parece não estar em português. Utilize termos em PT-BR." >&2
   exit 1
 fi
