@@ -57,10 +57,7 @@ codacy.yml
 # Ignore vscode rules (arquivo específico citado)
 .github/instructions/codacy.instructions.md
 
-### Documentação / Dumps removidos específicos
-docs/
-SISTEMA_NOTIFICACOES.md
-TESTE_CHECKIN.md
-SRC_CODE_DUMP.txt
+### Documentação / Dumps (ignorar todos .md exceto README)
+*.md
+!README.md
 *.txt
-# Permitimos outros .md futuros (exceto os listados acima) mantendo README já liberado
