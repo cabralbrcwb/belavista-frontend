@@ -74,10 +74,7 @@ export const environment = {
 };
 ```
 
-### API Endpoints
-- `POST /api/auth/login` - Autenticação
-- `GET /api/dashboard/stats` - Estatísticas
-- `GET /api/hospedes` - Lista de hóspedes
+
 
 ## 📋 Gerenciamento de Documentos
 
