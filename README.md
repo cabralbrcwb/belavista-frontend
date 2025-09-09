@@ -100,9 +100,7 @@ npm test           # Testes unitários
 npm run lint       # Verificar código
 ```
 
-### 👨‍💻 Autor
 
-Desenvolvido com ❤️ por **Daniel Silva**.
 
 ## 🚀 Endpoints da API
 
@@ -127,4 +125,9 @@ A seguir, a lista de endpoints disponíveis na aplicação.
 | `POST` | `/api/reservas/{id}/check-out` | Realiza o check-out de uma reserva com status `CHECK_IN` e retorna a fatura detalhada. |
 | `GET` | `/api/reservas` | Lista todas as reservas ou filtra por status (`PENDENTE`, `CHECK_IN`, `CHECK_OUT`, `CANCELADA`). |
 | `DELETE` | `/api/reservas/{id}` | Cancela uma reserva que ainda está com o status `PENDENTE`. |
+
+
+### 👨‍💻 Autor
+
+Desenvolvido com ❤️ por **Daniel Silva**.
 
