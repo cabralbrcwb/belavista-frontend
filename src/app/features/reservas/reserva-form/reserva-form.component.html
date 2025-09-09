@@ -22,7 +22,8 @@
       <div class="date-row">
         <mat-form-field appearance="outline">
           <mat-label>Data de Entrada</mat-label>
-          <input matInput [matDatepicker]="entradaPicker" formControlName="dataEntrada">
+          <!-- Aplicar mascara de data DD/MM/AAAA -->
+          <input matInput [matDatepicker]="entradaPicker" formControlName="dataEntrada" placeholder="DD/MM/AAAA">
           <mat-datepicker-toggle matSuffix [for]="entradaPicker"></mat-datepicker-toggle>
           <mat-datepicker #entradaPicker></mat-datepicker>
           <mat-error *ngIf="reservaForm.get('dataEntrada')?.invalid && reservaForm.get('dataEntrada')?.touched">

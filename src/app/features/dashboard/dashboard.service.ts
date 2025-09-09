@@ -17,7 +17,7 @@ export class DashboardService {
   private http = inject(HttpClient);
   private reservasApiUrl = 'http://localhost:8080/api/reservas';
 
-  // Este método vai buscar todos os dados necessários para o dashboard de uma só vez
+  // Este método vai buscar todos os dados necessários para o dashboard de u
   getDashboardStats(): Observable<DashboardStats> {
     // Criamos observables para cada chamada de API
     const reservasPendentes$ = this.http

@@ -1,1 +1,67 @@
-node_modules
+### Dependências
+node_modules/
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+
+### Build / Distribuição
+dist/
+build/
+tmp/
+temp/
+out/
+
+### Cache Angular / Ferramentas
+.angular/
+.cache/
+/.parcel-cache/
+/.turbo/
+
+### IDE / Editor
+.vscode/
+.idea/
+*.iml
+
+### SO / Lixo
+Thumbs.db
+Desktop.ini
+*.log
+*.tmp
+*.swp
+*.DS_Store
+
+### Relatórios / Coverage / Análise
+coverage/
+lcov.info
+reports/
+CHECKUP_REPORT.md
+
+### Arquivos de ferramenta externa (não usar Codacy)
+.codacy/
+codacy.yaml
+codacy.yml
+.codacy.yml
+.codacy.yaml
+
+### Testes removidos (garantia caso algo reapareça)
+**/*.spec.ts
+
+### Segurança / Env
+.env
+.env.*
+*.local
+
+### Mantidos explicitamente (sempre versionar)
+!README.md
+
+# Ignore vscode rules (arquivo específico citado)
+.github/instructions/codacy.instructions.md
+
+### Documentação / Dumps (excluir tudo exceto README)
+docs/
+*.md
+!README.md
+*.txt
+SISTEMA_NOTIFICACOES.md
+TESTE_CHECKIN.md
+SRC_CODE_DUMP.txt

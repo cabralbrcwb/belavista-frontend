@@ -12,6 +12,17 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Tipo Documento</mat-label>
+        <select matNativeControl formControlName="tipoDocumento">
+          <option value="" disabled selected>Selecione</option>
+          <option *ngFor="let t of tiposDocumento" [value]="t">{{ t }}</option>
+        </select>
+        <mat-error *ngIf="hospedeForm.get('tipoDocumento')?.invalid && hospedeForm.get('tipoDocumento')?.touched">
+          Tipo de documento é obrigatório
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
         <mat-label>Doc. (RG, CPF, Passport, CNH)</mat-label>
         <input matInput formControlName="documento">
         <mat-error *ngIf="hospedeForm.get('documento')?.invalid && hospedeForm.get('documento')?.touched">
@@ -21,10 +32,15 @@
 
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Telefone</mat-label>
-        <input matInput formControlName="telefone">
+  <input matInput formControlName="telefone" inputmode="numeric" placeholder="(DD) 9XXXX-XXXX">
         <mat-error *ngIf="hospedeForm.get('telefone')?.invalid && hospedeForm.get('telefone')?.touched">
           {{ getErrorMessage('telefone') }}
         </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>E-mail (opcional)</mat-label>
+        <input matInput formControlName="email">
       </mat-form-field>
     </div>
   </mat-dialog-content>

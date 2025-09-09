@@ -12,13 +12,21 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Doc. (RG, CPF, Passport, CNH)</mat-label>
+          <mat-label>Tipo Documento</mat-label>
+          <select matNativeControl formControlName="tipoDocumento">
+            <option value="">Selecione</option>
+            <option *ngFor="let t of tiposDocumento" [value]="t">{{ t }}</option>
+          </select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Documento</mat-label>
           <input matInput formControlName="documento">
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Telefone</mat-label>
-          <input matInput formControlName="telefone">
+          <input matInput formControlName="telefone" inputmode="numeric" placeholder="(DD) 9XXXX-XXXX">
         </mat-form-field>
 
         <span class="toolbar-spacer"></span>
@@ -45,7 +53,7 @@
             <div class="table-header">
               <div class="table-row header-row">
                 <div class="table-cell header-cell">NOME</div>
-                <div class="table-cell header-cell">DOC. (RG, CPF, PASSPORT, CNH)</div>
+                <div class="table-cell header-cell">DOCUMENTO</div>
                 <div class="table-cell header-cell">TELEFONE</div>
                 <div class="table-cell header-cell">AÇÕES</div>
               </div>
@@ -55,8 +63,8 @@
             <div class="table-body">
               <div class="table-row data-row" *ngFor="let hospede of hospedes">
                 <div class="table-cell data-cell">{{ hospede.nome }}</div>
-                <div class="table-cell data-cell">{{ hospede.documento }}</div>
-                <div class="table-cell data-cell">{{ hospede.telefone }}</div>
+                <div class="table-cell data-cell">{{ formatDocumentoForDisplay(hospede.tipoDocumento, hospede.documento) }}</div>
+                <div class="table-cell data-cell">{{ formatPhoneForDisplay(hospede.telefone) }}</div>
                 <div class="table-cell data-cell actions-cell">
                   <button mat-icon-button color="primary" (click)="editarHospede(hospede)" matTooltip="Editar">
                     <mat-icon>edit</mat-icon>

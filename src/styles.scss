@@ -399,6 +399,70 @@ small {
   background-color: var(--color-background) !important;
 }
 
+/* ------------------------------------------------------------
+   Global overrides: Darken all form texts (labels, inputs, combos)
+   ------------------------------------------------------------ */
+
+/* Labels of Angular Material form fields */
+.mat-mdc-form-field .mdc-floating-label,
+.mat-mdc-form-field .mat-mdc-floating-label {
+  color: #000 !important;
+}
+
+/* Inputs and placeholders */
+.mat-mdc-form-field .mat-mdc-input-element {
+  color: #000 !important;
+}
+.mat-mdc-form-field .mat-mdc-input-element::placeholder {
+  color: #000 !important;
+  opacity: 1 !important;
+}
+
+/* Mat Select displayed value and placeholder */
+.mat-mdc-select-value,
+.mat-mdc-select-value-text,
+.mat-mdc-select-placeholder {
+  color: #000 !important;
+}
+
+/* Mat Select/Autocomplete options text */
+.mat-mdc-option,
+.mat-mdc-option .mdc-list-item__primary-text {
+  color: #000 !important;
+}
+
+/* Autocomplete panel: light background and clear contrast */
+.mat-mdc-autocomplete-panel {
+  background-color: var(--color-surface-elevated) !important; /* white */
+  color: #000 !important;
+  border: 1px solid var(--color-border-light) !important;
+  box-shadow: var(--shadow-xl) !important;
+}
+
+/* Autocomplete option hover/active styles */
+.mat-mdc-autocomplete-panel .mat-mdc-option:hover,
+.mat-mdc-autocomplete-panel .mat-mdc-option.mdc-list-item--selected,
+.mat-mdc-autocomplete-panel .mat-mdc-option.mdc-list-item--activated {
+  background-color: var(--color-primary-50) !important;
+  color: var(--color-primary) !important;
+}
+
+/* Ensure primary text inside options inherits the intended color */
+.mat-mdc-autocomplete-panel .mat-mdc-option .mdc-list-item__primary-text {
+  color: inherit !important;
+}
+
+/* Checkbox label text */
+.mat-mdc-checkbox .mdc-form-field > label,
+.mat-mdc-checkbox .mdc-label {
+  color: #000 !important;
+}
+
+/* Helper/pricing info below controls when used */
+.pricing-info {
+  color: #000 !important;
+}
+
 .mat-list-item {
   color: var(--color-text-secondary) !important;
   font-weight: 400 !important;

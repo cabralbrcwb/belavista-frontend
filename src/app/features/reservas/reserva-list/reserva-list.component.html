@@ -68,8 +68,14 @@
               <div class="table-row data-row" *ngFor="let reserva of reservas">
                 <div class="table-cell data-cell">{{ reserva.hospede?.nome || reserva.hospedeNome || 'N/A' }}</div>
                 <div class="table-cell data-cell">{{ reserva.dataEntrada | date:'dd/MM/yyyy' }}</div>
-                <div class="table-cell data-cell">{{ reserva.dataSaidaPrevista | date:'dd/MM/yyyy' }}</div>
-                <div class="table-cell data-cell">{{ reserva.dataCheckout ? (reserva.dataCheckout | date:'dd/MM/yyyy') : '-' }}</div>
+                <div class="table-cell data-cell">{{ (reserva.dataSaida || reserva.dataSaidaPrevista) | date:'dd/MM/yyyy' }}</div>
+                <div class="table-cell data-cell">
+                  {{
+                    reserva.dataCheckout
+                      ? (reserva.dataCheckout | date:'dd/MM/yyyy')
+                      : (reserva.status === 'CHECK_OUT' ? ((reserva.dataSaida || reserva.dataSaidaPrevista) | date:'dd/MM/yyyy') : '-')
+                  }}
+                </div>
                 <div class="table-cell data-cell">
                   <span class="status-badge" [class]="'status-' + reserva.status.toLowerCase()">
                     {{ reserva.status }}

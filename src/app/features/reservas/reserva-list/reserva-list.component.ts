@@ -66,7 +66,24 @@ export class ReservaListComponent implements OnInit {
   }
 
   buscarReservas(): void {
-    const filters = this.searchForm.value;
+    const raw = this.searchForm.value;
+
+    const normalizarData = (v: any): string | undefined => {
+      if (!v) return undefined;
+      const d = v instanceof Date ? v : new Date(v);
+      if (isNaN(d.getTime())) return undefined;
+      const pad = (n: number) => n.toString().padStart(2, '0');
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; // yyyy-MM-dd
+    };
+
+    const filters = {
+      status: raw.status || undefined,
+      hospedeNome: raw.hospedeNome?.trim() || undefined,
+      dataEntrada: normalizarData(raw.dataEntrada),
+      // Caso no futuro adicione o campo de saída prevista ao formulário
+      dataSaidaPrevista: normalizarData(raw.dataSaidaPrevista)
+    };
+
     this.reservas$ = this.reservaService.getReservas(filters);
   }
 
@@ -164,9 +181,10 @@ export class ReservaListComponent implements OnInit {
     ref.afterClosed().subscribe(confirmado => {
       if (confirmado) {
         this.reservaService.checkOut(reserva.id!).subscribe({
-          next: (response: CheckoutResponseDTO) => {
+          next: (response: CheckoutResponseDTO | any) => {
             this.buscarReservas();
-            this.mostrarFatura(response);
+            const faturaNormalizada = this.normalizarFatura(response);
+            this.mostrarFatura(faturaNormalizada);
             this.notificationService.showSuccess('Check-out realizado com sucesso!');
           },
           error: (error) => {
@@ -177,34 +195,72 @@ export class ReservaListComponent implements OnInit {
     });
   }
 
+  private normalizarFatura(resp: any): CheckoutResponseDTO {
+    // Aceita possíveis variações de nomes vindos do backend
+    return {
+      dataCheckout: resp?.dataCheckout || resp?.data_checkout || resp?.checkoutDate,
+      detalhes: Array.isArray(resp?.detalhes) ? resp.detalhes : (Array.isArray(resp?.itens) ? resp.itens : []),
+      valorTotalDiarias: Number(resp?.valorTotalDiarias ?? resp?.totalDiarias ?? 0),
+      valorTotalEstacionamento: Number(resp?.valorTotalEstacionamento ?? resp?.totalEstacionamento ?? 0),
+      valorMultaAtraso: Number(resp?.valorMultaAtraso ?? resp?.multa ?? 0),
+      valorTotalGeral: Number(resp?.valorTotalGeral ?? resp?.totalGeral ?? resp?.total ?? 0)
+    };
+  }
+
   mostrarFatura(fatura: CheckoutResponseDTO): void {
-    let detalhesText = 'DETALHES DA FATURA:\n\n';
-    if (fatura.dataCheckout) {
-      const data = new Date(fatura.dataCheckout);
-      detalhesText += `Data do Check-out: ${data.toLocaleDateString()} ${data.toLocaleTimeString()}\n\n`;
-    }
-    
-    // Adicionar detalhes de cada custo
-    if (fatura.detalhes && fatura.detalhes.length > 0) {
-      detalhesText += 'DETALHAMENTO:\n';
-      fatura.detalhes.forEach(detalhe => {
-        detalhesText += `${detalhe.descricao} (${detalhe.data}): R$ ${detalhe.valor.toFixed(2)}\n`;
+    try {
+      // Se veio tudo zerado e sem detalhes, mostrar aviso simples
+      const semValores = !fatura.detalhes?.length && [
+        fatura.valorTotalDiarias,
+        fatura.valorTotalEstacionamento,
+        fatura.valorMultaAtraso,
+        fatura.valorTotalGeral
+      ].every(v => !v || v === 0);
+
+      if (semValores) {
+        this.dialog.open(InfoDialogComponent, {
+          data: {
+            title: 'Fatura do Check-out',
+            message: 'Fatura não retornou valores detalhados. O checkout foi processado, mas não há composição de custos.'
+          }
+        });
+        return;
+      }
+
+      let detalhesText = 'DETALHES DA FATURA:\n\n';
+      if (fatura.dataCheckout) {
+        const data = new Date(fatura.dataCheckout);
+        if (!isNaN(data.getTime())) {
+          detalhesText += `Data do Check-out: ${data.toLocaleDateString()} ${data.toLocaleTimeString()}\n\n`;
+        }
+      }
+      
+      if (fatura.detalhes && fatura.detalhes.length > 0) {
+        detalhesText += 'DETALHAMENTO:\n';
+        fatura.detalhes.forEach(detalhe => {
+          const valor = (typeof detalhe.valor === 'number') ? detalhe.valor : Number(detalhe.valor) || 0;
+          detalhesText += `${detalhe.descricao} (${detalhe.data}): R$ ${valor.toFixed(2)}\n`;
+        });
+        detalhesText += '\n';
+      }
+      
+      detalhesText += 'RESUMO:\n';
+      detalhesText += `Diárias: R$ ${(fatura.valorTotalDiarias || 0).toFixed(2)}\n`;
+      detalhesText += `Estacionamento: R$ ${(fatura.valorTotalEstacionamento || 0).toFixed(2)}\n`;
+      if (fatura.valorMultaAtraso && fatura.valorMultaAtraso > 0) {
+        detalhesText += `Multa por atraso: R$ ${(fatura.valorMultaAtraso).toFixed(2)}\n`;
+      }
+      detalhesText += `\nTOTAL GERAL: R$ ${(fatura.valorTotalGeral || 0).toFixed(2)}`;
+      
+      this.dialog.open(InfoDialogComponent, {
+        data: { title: 'Fatura do Check-out', message: detalhesText }
       });
-      detalhesText += '\n';
+    } catch (e) {
+      console.error('Erro ao montar fatura:', e, fatura);
+      this.dialog.open(InfoDialogComponent, {
+        data: { title: 'Fatura do Check-out', message: 'Não foi possível exibir a fatura (erro de formatação). Confira o console.' }
+      });
     }
-    
-    // Resumo dos valores
-    detalhesText += 'RESUMO:\n';
-    detalhesText += `Diárias: R$ ${fatura.valorTotalDiarias.toFixed(2)}\n`;
-    detalhesText += `Estacionamento: R$ ${fatura.valorTotalEstacionamento.toFixed(2)}\n`;
-    if (fatura.valorMultaAtraso > 0) {
-      detalhesText += `Multa por atraso: R$ ${fatura.valorMultaAtraso.toFixed(2)}\n`;
-    }
-    detalhesText += `\nTOTAL GERAL: R$ ${fatura.valorTotalGeral.toFixed(2)}`;
-    
-    this.dialog.open(InfoDialogComponent, {
-      data: { title: 'Fatura do Check-out', message: detalhesText }
-    });
   }
 
   getStatusColor(status: StatusReserva): string {

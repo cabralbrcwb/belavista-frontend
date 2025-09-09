@@ -47,51 +47,117 @@ export class NotificationService {
    * Converte erros técnicos do backend em mensagens amigáveis
    */
   parseBackendError(error: any): string {
-    if (!error || typeof error !== 'string') {
-      return 'Ocorreu um erro inesperado. Tente novamente.';
+    // Caso comum: erro de rede/CORS/servidor fora do ar
+    if (error && typeof error === 'object') {
+      // Angular HttpErrorResponse quando backend está offline tem status 0
+      if (typeof (error as any).status === 'number' && (error as any).status === 0) {
+        return 'Não foi possível conectar ao servidor. Verifique se o backend está em execução e sua conexão de rede.';
+      }
+      // Mensagens padrões de falha de rede em diferentes navegadores
+      const asString = typeof error === 'string' ? error : (typeof error?.message === 'string' ? error.message : '');
+      if (asString) {
+        const lower = asString.toLowerCase();
+        if (lower.includes('unknown error') || lower.includes('failed to fetch') || lower.includes('networkerror') || lower.includes('network error')) {
+          return 'Não foi possível conectar ao servidor. Verifique se o backend está em execução e sua conexão de rede.';
+        }
+      }
+    }
+
+    // 1) Normaliza: tenta extrair uma string significativa de objetos comuns
+    let msg: string | undefined;
+
+    const tryExtract = (e: any): string | undefined => {
+      if (!e) return undefined;
+      if (typeof e === 'string') return e;
+      // HttpErrorResponse.error pode ser string ou objeto
+      if (typeof e?.error === 'string') return e.error;
+      // Campos comuns de APIs
+      const candidates = [
+        e?.message,
+        e?.mensagem,
+        e?.detail,
+        e?.detalhe,
+        e?.error,
+        e?.title,
+        e?.titulo,
+      ].filter(Boolean) as string[];
+      if (candidates.length > 0) return candidates[0];
+      // Listas de erros (ex.: Bean Validation / RFC 7807)
+      if (Array.isArray(e?.errors) && e.errors.length > 0) {
+        const first = e.errors[0];
+        return first?.message || first?.mensagem || first?.defaultMessage || JSON.stringify(first);
+      }
+      if (Array.isArray(e?.violations) && e.violations.length > 0) {
+        const first = e.violations[0];
+        return first?.message || first?.mensagem || JSON.stringify(first);
+      }
+      // Causa encadeada
+      if (e?.cause?.message) return e.cause.message;
+      return undefined;
+    };
+
+    msg = tryExtract(error);
+  if (!msg) {
+      return 'Ocorreu um erro no servidor. Tente novamente ou entre em contato com o suporte.';
+    }
+
+    // 2) Se a mensagem já é amigável (sem termos técnicos), devolve-a diretamente
+    const technicalHints = [
+      'exception', 'constraint', 'duplicate key', 'sql', 'org.', 'stack trace',
+      'violates', 'table', 'column', 'null pointer', 'hibernate', 'jdbc', 'error code',
+      'referenced', 'integrity', 'key value', 'unique index'
+    ];
+    const isTechnical = technicalHints.some(h => msg!.toLowerCase().includes(h));
+    if (!isTechnical) {
+      return msg.trim();
     }
 
     // Trata erro de foreign key constraint - não pode deletar porque tem relacionamentos
-    if (error.includes('foreign key constraint') && error.includes('violates')) {
-      if (error.includes('hospede') && error.includes('reserva')) {
+    if (msg.includes('foreign key constraint') && msg.includes('violates')) {
+      if (msg.includes('hospede') && msg.includes('reserva')) {
         return 'Não é possível excluir este hóspede pois ele possui reservas associadas. Remova as reservas primeiro.';
       }
       return 'Não é possível excluir este item pois ele possui dados relacionados. Remova os dados relacionados primeiro.';
     }
 
     // Trata erro de duplicação de dados únicos
-    if (error.includes('duplicate key') || error.includes('already exists')) {
-      if (error.includes('email')) {
+    if (msg.includes('duplicate key') || msg.includes('already exists')) {
+      if (msg.includes('email')) {
         return 'Este email já está sendo usado por outro usuário.';
       }
-      if (error.includes('cpf') || error.includes('documento')) {
+      if (msg.includes('cpf') || msg.includes('documento')) {
         return 'Este documento já está cadastrado no sistema.';
       }
       return 'Este dado já existe no sistema. Use um valor diferente.';
     }
 
     // Trata erro de validação de dados
-    if (error.includes('validation') || error.includes('constraint')) {
+    if (msg.includes('validation') || msg.includes('constraint')) {
       return 'Os dados informados não atendem aos critérios de validação. Verifique e tente novamente.';
     }
 
+    // Caso específico: dataSaidaPrevista ausente causando NullPointer/compare
+    if (msg.includes('dataSaidaPrevista') && (msg.includes('null') || msg.includes('isBefore'))) {
+      return 'Informe a Data de Saída prevista para continuar.';
+    }
+
     // Trata erro de dados não encontrados
-    if (error.includes('not found') || error.includes('não encontrado')) {
+    if (msg.includes('not found') || msg.includes('não encontrado')) {
       return 'O item solicitado não foi encontrado.';
     }
 
     // Trata erro de acesso negado
-    if (error.includes('access denied') || error.includes('forbidden') || error.includes('unauthorized')) {
+    if (msg.includes('access denied') || msg.includes('forbidden') || msg.includes('unauthorized')) {
       return 'Você não tem permissão para realizar esta operação.';
     }
 
     // Trata erro de conexão com banco de dados
-    if (error.includes('connection') || error.includes('timeout')) {
+    if (msg.includes('connection') || msg.includes('timeout')) {
       return 'Problema de conexão com o servidor. Tente novamente em alguns momentos.';
     }
 
     // Para outros erros técnicos, extrai a parte mais relevante
-    const lines = error.split('\n');
+    const lines = msg.split('\n');
     const firstLine = lines[0] || '';
     
     // Tenta extrair mensagem entre colchetes [ERROR: ...]
@@ -106,7 +172,7 @@ export class NotificationService {
     }
 
     // Tenta extrair mensagem após "Detalhe:"
-    const detailMatch = error.match(/Detalhe:\s*([^\.]+)/);
+    const detailMatch = msg.match(/Detalhe:\s*([^\.]+)/);
     if (detailMatch) {
       return this.translateTechnicalMessage(detailMatch[1].trim());
     }

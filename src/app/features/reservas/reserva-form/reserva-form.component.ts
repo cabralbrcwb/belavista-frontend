@@ -1,6 +1,6 @@
 import { Component, inject, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -51,12 +51,12 @@ export class ReservaFormComponent {
     this.isEdit = !!data?.reserva;
     
     this.reservaForm = this.fb.group({
-      hospede: [this.isEdit ? data.reserva?.hospede : null, Validators.required], // Mudança para objeto Hospede completo
+      hospede: [this.isEdit ? data.reserva?.hospede : null, Validators.required],
       dataEntrada: [data?.reserva?.dataEntrada || '', Validators.required],
-      dataSaidaPrevista: [data?.reserva?.dataSaidaPrevista || '', Validators.required],
-      adicionalVeiculo: [data?.reserva?.adicionalVeiculo || false], // Campo obrigatório para estacionamento
+      dataSaidaPrevista: [data?.reserva?.dataSaidaPrevista || data?.reserva?.dataSaida || '', Validators.required],
+      adicionalVeiculo: [data?.reserva?.adicionalVeiculo || false],
       observacoes: [data?.reserva?.observacoes || '']
-    });
+    }, { validators: [this.validateDatas.bind(this)] });
 
     // Carregar hóspedes para o autocomplete
     this.hospedeService.getHospedes().subscribe(hospedes => {
@@ -103,12 +103,31 @@ export class ReservaFormComponent {
   }
 
   onSave(): void {
+    // Validação manual adicional para garantir que não feche o modal caso a saída seja menor
+    const entradaCtrl = this.reservaForm.get('dataEntrada');
+    const saidaCtrl = this.reservaForm.get('dataSaidaPrevista');
+    const entradaVal = entradaCtrl?.value ? new Date(entradaCtrl.value) : null;
+    const saidaVal = saidaCtrl?.value ? new Date(saidaCtrl.value) : null;
+
+    if (entradaVal && saidaVal && saidaVal < entradaVal) {
+      // Marca erro específico no campo de saída
+      const existingErrors = saidaCtrl?.errors || {};
+      saidaCtrl?.setErrors({ ...existingErrors, dataAntesEntrada: true });
+      saidaCtrl?.markAsTouched();
+      this.reservaForm.updateValueAndValidity();
+      return; // NÃO fecha o diálogo
+    }
+
     if (this.reservaForm.valid) {
       const formValue = this.reservaForm.value;
 
+      const dataEntrada = this.formatAsLocalDateTimeString(formValue.dataEntrada);
+      const dataSaidaPrevista = this.formatAsLocalDateTimeString(formValue.dataSaidaPrevista);
+
       const payload: any = {
-        dataEntrada: formValue.dataEntrada,
-        dataSaidaPrevista: formValue.dataSaidaPrevista,
+        dataEntrada,
+        // Conforme guia da API: enviar "dataSaidaPrevista"
+        dataSaidaPrevista,
         adicionalVeiculo: formValue.adicionalVeiculo, // Campo obrigatório
         observacoes: formValue.observacoes,
         idHospede: formValue.hospede ? formValue.hospede.id : null
@@ -132,8 +151,26 @@ export class ReservaFormComponent {
     }
   }
 
+  // Converte Date/string para 'YYYY-MM-DDTHH:mm:ss' no horário local (sem timezone)
+  private formatAsLocalDateTimeString(value: any): string | null {
+    if (!value) return null;
+    const d = (value instanceof Date) ? value : new Date(value);
+    if (isNaN(d.getTime())) return null;
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    const yyyy = d.getFullYear();
+    const mm = pad(d.getMonth() + 1);
+    const dd = pad(d.getDate());
+    const HH = pad(d.getHours());
+    const MM = pad(d.getMinutes());
+    const SS = pad(d.getSeconds());
+    return `${yyyy}-${mm}-${dd}T${HH}:${MM}:${SS}`;
+  }
+
   getErrorMessage(fieldName: string): string {
     const field = this.reservaForm.get(fieldName);
+    if (fieldName === 'dataSaidaPrevista' && field?.errors?.['dataAntesEntrada']) {
+      return 'Data de saída não pode ser antes da data de entrada';
+    }
     if (field?.hasError('required')) {
       switch(fieldName) {
         case 'hospede':
@@ -147,5 +184,35 @@ export class ReservaFormComponent {
       }
     }
     return '';
+  }
+
+  /**
+   * Validador de consistência entre dataEntrada e dataSaidaPrevista
+   */
+  private validateDatas(group: AbstractControl): ValidationErrors | null {
+    const entrada = group.get('dataEntrada')?.value;
+    const saida = group.get('dataSaidaPrevista')?.value;
+    if (!entrada || !saida) return null;
+    const dEntrada = new Date(entrada);
+    const dSaida = new Date(saida);
+    if (isNaN(dEntrada.getTime()) || isNaN(dSaida.getTime())) return null;
+    if (dSaida < dEntrada) {
+      // Marca erro no campo de saída (mantendo outros erros)
+      const saidaCtrl = group.get('dataSaidaPrevista');
+      const existing = saidaCtrl?.errors || {};
+      saidaCtrl?.setErrors({ ...existing, dataAntesEntrada: true });
+      return { dataRangeInvalida: true };
+    } else {
+      const saidaCtrl = group.get('dataSaidaPrevista');
+      if (saidaCtrl?.errors) {
+        const { dataAntesEntrada, ...rest } = saidaCtrl.errors;
+        if (dataAntesEntrada) {
+          // Remove somente este erro específico
+            const remaining = Object.keys(rest).length ? rest : null;
+            saidaCtrl.setErrors(remaining);
+        }
+      }
+    }
+    return null;
   }
 }

@@ -3,9 +3,12 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 // Define a estrutura de dados de um Hóspede
+export type TipoDocumento = 'RG' | 'CPF' | 'PASSAPORTE' | 'CNH';
+
 export interface Hospede {
   id?: number;
   nome: string;
+  tipoDocumento: TipoDocumento;
   documento: string;
   telefone: string;
   email?: string; // Campo adicional mencionado no backend
@@ -14,6 +17,7 @@ export interface Hospede {
 // Interface para filtros de busca
 export interface HospedeFilters {
   nome?: string;
+  tipoDocumento?: TipoDocumento;
   documento?: string;
   telefone?: string;
   email?: string; // Campo adicional para filtro
@@ -26,6 +30,24 @@ export class HospedeService {
   private http = inject(HttpClient);
   private apiUrl = 'http://localhost:8080/api/hospedes';
 
+  private normalizeDocumento(tipo: TipoDocumento | undefined, documento: string | undefined): string {
+    const v = (documento || '');
+    if (!tipo) {
+      // fallback: remove tudo que não é alfanumérico
+      return v.replace(/[^A-Za-z0-9]/g, '');
+    }
+    switch (tipo) {
+      case 'CPF':
+      case 'RG':
+      case 'CNH':
+        return v.replace(/\D/g, '');
+      case 'PASSAPORTE':
+        return v.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+      default:
+        return v.replace(/[^A-Za-z0-9]/g, '');
+    }
+  }
+
   /**
    * Busca a lista de hóspedes no backend com filtros opcionais.
    */
@@ -36,11 +58,15 @@ export class HospedeService {
       if (filters.nome) {
         params = params.set('nome', filters.nome);
       }
+      if (filters.tipoDocumento) {
+        params = params.set('tipoDocumento', filters.tipoDocumento);
+      }
       if (filters.documento) {
-        params = params.set('documento', filters.documento);
+        params = params.set('documento', this.normalizeDocumento(filters.tipoDocumento, filters.documento));
       }
       if (filters.telefone) {
-        params = params.set('telefone', filters.telefone);
+        // envia apenas dígitos
+        params = params.set('telefone', filters.telefone.replace(/\D/g, ''));
       }
       if (filters.email) {
         params = params.set('email', filters.email);
@@ -54,14 +80,24 @@ export class HospedeService {
    * Cria um novo hóspede
    */
   createHospede(hospede: Hospede): Observable<Hospede> {
-    return this.http.post<Hospede>(this.apiUrl, hospede);
+    const payload: Hospede = {
+      ...hospede,
+      telefone: (hospede.telefone || '').replace(/\D/g, ''),
+      documento: this.normalizeDocumento(hospede.tipoDocumento, hospede.documento)
+    } as Hospede;
+    return this.http.post<Hospede>(this.apiUrl, payload);
   }
 
   /**
    * Atualiza um hóspede existente
    */
   updateHospede(hospede: Hospede): Observable<Hospede> {
-    return this.http.put<Hospede>(`${this.apiUrl}/${hospede.id}`, hospede);
+    const payload: Hospede = {
+      ...hospede,
+      telefone: (hospede.telefone || '').replace(/\D/g, ''),
+      documento: this.normalizeDocumento(hospede.tipoDocumento, hospede.documento)
+    } as Hospede;
+    return this.http.put<Hospede>(`${this.apiUrl}/${hospede.id}`, payload);
   }
 
   /**

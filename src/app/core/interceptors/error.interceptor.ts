@@ -2,6 +2,7 @@ import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { NotificationService } from '../services/notification.service';
+import { ApiErrorResponse, isApiErrorResponse } from '../models/api-error.model';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const notificationService = inject(NotificationService);
@@ -10,6 +11,27 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: HttpErrorResponse) => {
       let errorMessage = '';
 
+      // Helper: tenta extrair mensagem vinda do backend em diferentes formatos
+      const getBackendMessage = (err: HttpErrorResponse): string | undefined => {
+        const raw = err?.error;
+        if (!raw) return undefined;
+        // 1) Padrão oficial do backend (ControllerAdvice)
+        if (isApiErrorResponse(raw as ApiErrorResponse)) {
+          return (raw as ApiErrorResponse).message;
+        }
+        if (typeof raw === 'string') return raw; // corpo como texto simples
+        if (typeof raw?.message === 'string') return raw.message;
+        // Alguns backends usam outros campos
+        if (typeof raw?.mensagem === 'string') return raw.mensagem;
+        if (typeof raw?.detail === 'string') return raw.detail;
+        if (typeof raw?.detalhe === 'string') return raw.detalhe;
+        if (Array.isArray(raw?.errors) && raw.errors.length > 0) {
+          const first = raw.errors[0];
+          return first?.message || first?.mensagem || first?.defaultMessage;
+        }
+        return undefined;
+      };
+
       if (error.error instanceof ErrorEvent) {
         // Erro do lado do cliente
         errorMessage = `Erro: ${error.error.message}`;
@@ -17,9 +39,14 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       } else {
         // Erro do lado do servidor
         switch (error.status) {
+          case 0:
+            // Falha de rede/CORS/servidor indisponível
+            errorMessage = 'Não foi possível conectar ao servidor. Verifique se o backend está em execução e sua conexão de rede.';
+            notificationService.showError(errorMessage);
+            break;
           case 400:
             // Bad Request - dados inválidos
-            errorMessage = error.error?.message || 'Dados inválidos enviados para o servidor.';
+            errorMessage = getBackendMessage(error) || 'Dados inválidos enviados para o servidor.';
             notificationService.showError(notificationService.parseBackendError(errorMessage));
             break;
 
@@ -31,9 +58,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
             break;
 
           case 403:
-            // Forbidden - sem permissão
-            errorMessage = 'Você não tem permissão para realizar esta operação.';
-            notificationService.showError(errorMessage);
+            // Forbidden - tentar usar mensagem do backend antes do fallback
+            errorMessage = getBackendMessage(error) || 'Você não tem permissão para realizar esta operação.';
+            notificationService.showError(notificationService.parseBackendError(errorMessage));
             break;
 
           case 404:
@@ -44,19 +71,19 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
           case 409:
             // Conflict - geralmente dados duplicados
-            errorMessage = error.error?.message || 'Conflito de dados. O item já existe.';
+            errorMessage = getBackendMessage(error) || 'Conflito de dados. O item já existe.';
             notificationService.showError(notificationService.parseBackendError(errorMessage));
             break;
 
           case 422:
             // Unprocessable Entity - erro de validação
-            errorMessage = error.error?.message || 'Dados não puderam ser processados. Verifique os campos.';
+            errorMessage = getBackendMessage(error) || 'Dados não puderam ser processados. Verifique os campos.';
             notificationService.showError(notificationService.parseBackendError(errorMessage));
             break;
 
           case 500:
             // Internal Server Error
-            errorMessage = error.error?.message || error.message || 'Erro interno do servidor';
+            errorMessage = getBackendMessage(error) || error.message || 'Erro interno do servidor';
             notificationService.showError(notificationService.parseBackendError(errorMessage));
             break;
 
@@ -70,7 +97,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
           default:
             // Outros erros
-            errorMessage = error.error?.message || error.message || 'Erro inesperado';
+            errorMessage = getBackendMessage(error) || error.message || 'Erro inesperado';
             notificationService.showError(notificationService.parseBackendError(errorMessage));
             break;
         }

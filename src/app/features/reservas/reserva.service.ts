@@ -24,7 +24,13 @@ export interface Reserva {
   }; // Objeto hospede completo como vem do backend
   hospedeNome?: string; // Para retrocompatibilidade
   dataEntrada: string;
-  dataSaidaPrevista: string; // Corrigido para coincidir com o backend
+  /**
+   * Campo retornado pelo backend como data prevista de saída.
+   * O backend usa a propriedade "dataSaida". Mantemos também o alias
+   * dataSaidaPrevista para retrocompatibilidade com o restante do app.
+   */
+  dataSaida?: string;
+  dataSaidaPrevista?: string;
   /**
    * Data/hora efetiva do checkout retornada pelo backend após o check-out.
    * Ex.: "2023-10-27T14:30:55.123456". Opcional em reservas ainda não finalizadas.
@@ -41,7 +47,8 @@ export interface ReservaFilters {
   status?: StatusReserva;
   hospedeNome?: string;
   dataEntrada?: string;
-  dataSaidaPrevista?: string; // Corrigido
+  dataSaidaPrevista?: string; // filtro opcional
+  dataSaida?: string; // aceitar também o nome do backend
 }
 
 // Interface para resposta do checkout - CORRIGIDA para alinhar com backend
@@ -85,26 +92,43 @@ export class ReservaService {
       if (filters.dataEntrada) {
         params = params.set('dataEntrada', filters.dataEntrada);
       }
-      if (filters.dataSaidaPrevista) {
-        params = params.set('dataSaidaPrevista', filters.dataSaidaPrevista);
+      // Envia o filtro usando o nome aceito pelo backend, priorizando dataSaida
+      if (filters.dataSaida) {
+        params = params.set('dataSaida', filters.dataSaida);
+      } else if (filters.dataSaidaPrevista) {
+        params = params.set('dataSaida', filters.dataSaidaPrevista);
       }
     }
 
-    return this.http.get<Reserva[]>(this.apiUrl, { params });
+    return this.http.get<Reserva[]>(this.apiUrl, { params }) as Observable<Reserva[]>;
   }
 
   /**
    * Cria uma nova reserva
    */
   createReserva(reserva: Reserva): Observable<Reserva> {
-    return this.http.post<Reserva>(this.apiUrl, reserva);
+    // Converte alias para o nome esperado pelo backend
+    const payload: any = { ...reserva };
+    // Backend espera dataSaidaPrevista no DTO de criação
+    if (!payload.dataSaidaPrevista && payload.dataSaida) {
+      payload.dataSaidaPrevista = payload.dataSaida;
+    }
+    // Evita ambiguidade enviando apenas o campo esperado
+    delete payload.dataSaida;
+    return this.http.post<Reserva>(this.apiUrl, payload);
   }
 
   /**
    * Atualiza uma reserva existente
    */
   updateReserva(reserva: Reserva): Observable<Reserva> {
-    return this.http.put<Reserva>(`${this.apiUrl}/${reserva.id}`, reserva);
+    const payload: any = { ...reserva };
+    // Backend espera dataSaidaPrevista também na atualização
+    if (!payload.dataSaidaPrevista && payload.dataSaida) {
+      payload.dataSaidaPrevista = payload.dataSaida;
+    }
+    delete payload.dataSaida;
+    return this.http.put<Reserva>(`${this.apiUrl}/${reserva.id}`, payload);
   }
 
   /**

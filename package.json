@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
   "watch": "ng build --watch --configuration development",
-  "test": "ng test --watch=false"
+  "test": "ng test --watch=false",
+  "dump:src": "node ./scripts/dump-src.mjs"
   },
   "private": true,
   "dependencies": {
