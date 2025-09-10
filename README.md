@@ -92,11 +92,9 @@ export const environment = {
 };
 ```
 
-<<<<<<< HEAD
-=======
 
 
->>>>>>> 615affc2f5eb40451493985438b18c8f06ec8378
+
 ## 📋 Gerenciamento de Documentos
 
 ### Tipos de Documento Suportados
@@ -118,12 +116,6 @@ npm run build      # Build produção
 npm test           # Testes unitários
 npm run lint       # Verificar código
 ```
-
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 615affc2f5eb40451493985438b18c8f06ec8378
 ## 🚀 Endpoints da API
 
 A seguir, a lista de endpoints disponíveis na aplicação.
@@ -148,7 +140,7 @@ A seguir, a lista de endpoints disponíveis na aplicação.
 | `GET` | `/api/reservas` | Lista todas as reservas ou filtra por status (`PENDENTE`, `CHECK_IN`, `CHECK_OUT`, `CANCELADA`). |
 | `DELETE` | `/api/reservas/{id}` | Cancela uma reserva que ainda está com o status `PENDENTE`. |
 
-<<<<<<< HEAD
+
 ## 🖼️ Telas de Produção
 
 Fluxo visual do sistema (tamanhos aproximados das telas reais, largura 1200px para boa legibilidade):
@@ -225,15 +217,8 @@ Fluxo visual do sistema (tamanhos aproximados das telas reais, largura 1200px pa
   <img src="src/assets/images/reservas_listagem.png" alt="Listagem após faturamento" width="1200" />
 </div>
 
-<!-- markdownlint-enable MD033 -->
-
-## 👨‍💻 Autor
-
-Desenvolvido com ❤️ por **Daniel Silva**.
-=======
-
 ### 👨‍💻 Autor
 
 Desenvolvido com ❤️ por **Daniel Silva**.
 
->>>>>>> 615affc2f5eb40451493985438b18c8f06ec8378
+
