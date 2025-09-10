@@ -17,7 +17,7 @@ Sistema de Gerenciamento Hoteleiro desenvolvido em Angular 18 com Material Desig
 - [📜 Scripts](#-scripts)
 - [🚀 Endpoints da API](#-endpoints-da-api)
 - [🖼️ Telas de Produção](#-telas-de-produção)
-- [👨‍💻 Autor](#-autor)
+
 
 ## 🚀 Visão Geral
 
@@ -208,13 +208,7 @@ Fluxo visual do sistema (tamanhos aproximados das telas reais, largura 1200px pa
   <img src="src/assets/images/reservas_checkout_03.png" alt="Checkout passo 3" width="1200" />
 </div>
 
-### 9) Faturamento
-
-<div align="center">
-  <img src="src/assets/images/faturamento.png" alt="Faturamento (fatura)" width="1200" />
-</div>
-
-### 10) Listagem com valor atualizado
+### 09) Listagem com valor atualizado
 
 <div align="center">
   <img src="src/assets/images/reservas_listagem.png" alt="Listagem após faturamento" width="1200" />
