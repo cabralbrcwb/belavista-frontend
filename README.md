@@ -2,6 +2,23 @@
 
 Sistema de Gerenciamento Hoteleiro desenvolvido em Angular 18 com Material Design.
 
+## 📚 Sumário
+
+- [🚀 Visão Geral](#-visão-geral)
+- [⚡ Funcionalidades](#-funcionalidades)
+- [🛠 Tecnologias](#-tecnologias)
+- [📋 Pré-requisitos](#-pré-requisitos)
+- [🔧 Instalação](#-instalação)
+- [📁 Estrutura](#-estrutura)
+- [🔑 Configuração](#-configuração)
+  - [🔐 Variáveis de Ambiente](#variáveis-de-ambiente)
+- [📋 Gerenciamento de Documentos](#-gerenciamento-de-documentos)
+  - [📄 Tipos de Documento Suportados](#tipos-de-documento-suportados)
+- [📜 Scripts](#-scripts)
+- [🚀 Endpoints da API](#-endpoints-da-api)
+- [🖼️ Telas de Produção](#-telas-de-produção)
+- [👨‍💻 Autor](#-autor)
+
 ## 🚀 Visão Geral
 
 Aplicação web para gerenciamento hoteleiro com interface moderna e responsiva. Inclui autenticação JWT, dashboard em tempo real e gerenciamento de hóspedes.
@@ -44,11 +61,11 @@ npm install
 npm start
 ```
 
-A aplicação estará disponível em `http://localhost:4200/`
+A aplicação estará disponível em `http://localhost:4200/`.
 
 ## 📁 Estrutura
 
-```
+```text
 src/app/
 ├── core/                    # Serviços principais
 │   ├── guards/             # Proteção de rotas
@@ -65,6 +82,7 @@ src/app/
 ## 🔑 Configuração
 
 ### Variáveis de Ambiente
+
 Criar `src/environments/environment.ts`:
 
 ```typescript
@@ -74,14 +92,10 @@ export const environment = {
 };
 ```
 
-### API Endpoints
-- `POST /api/auth/login` - Autenticação
-- `GET /api/dashboard/stats` - Estatísticas
-- `GET /api/hospedes` - Lista de hóspedes
-
 ## 📋 Gerenciamento de Documentos
 
 ### Tipos de Documento Suportados
+
 O sistema suporta os seguintes tipos de documento para cadastro de hóspedes:
 
 - **RG** - Registro Geral
@@ -99,10 +113,6 @@ npm run build      # Build produção
 npm test           # Testes unitários
 npm run lint       # Verificar código
 ```
-
-### 👨‍💻 Autor
-
-Desenvolvido com ❤️ por **Daniel Silva**.
 
 ## 🚀 Endpoints da API
 
@@ -128,3 +138,90 @@ A seguir, a lista de endpoints disponíveis na aplicação.
 | `GET` | `/api/reservas` | Lista todas as reservas ou filtra por status (`PENDENTE`, `CHECK_IN`, `CHECK_OUT`, `CANCELADA`). |
 | `DELETE` | `/api/reservas/{id}` | Cancela uma reserva que ainda está com o status `PENDENTE`. |
 
+## 🖼️ Telas de Produção
+
+Fluxo visual do sistema (tamanhos aproximados das telas reais, largura 1200px para boa legibilidade):
+
+<!-- markdownlint-disable MD033 -->
+
+### 1) Login
+
+<div align="center">
+  <img src="src/assets/images/login.png" alt="Tela de Login" width="1200" />
+</div>
+
+### 2) Dashboard
+
+<div align="center">
+  <img src="src/assets/images/dashboard.png" alt="Dashboard" width="1200" />
+</div>
+
+### 3) Listagem de Hóspedes
+
+<div align="center">
+  <img src="src/assets/images/hospedes_listagem.png" alt="Listagem de Hóspedes" width="1200" />
+</div>
+
+### 4) Cadastro de Hóspedes
+
+<div align="center">
+  <img src="src/assets/images/hospedes_cadastro.png" alt="Cadastro de Hóspedes" width="1200" />
+</div>
+
+### 5) Reservas (acesso ao módulo)
+
+<div align="center">
+  <img src="src/assets/images/reservas_modulo.png" alt="Módulo de Reservas" width="1200" />
+</div>
+
+### 6) Listagem de Reservas
+
+<div align="center">
+  <img src="src/assets/images/reservas_listagem.png" alt="Listagem de Reservas" width="1200" />
+</div>
+
+### 7) Check-in (sequência)
+
+<div align="center">
+  <img src="src/assets/images/reservas_check-in_01.png" alt="Check-in passo 1" width="1200" />
+</div>
+
+<div align="center">
+  <img src="src/assets/images/reservas_check-in_02.png" alt="Check-in passo 2" width="1200" />
+</div>
+
+<div align="center">
+  <img src="src/assets/images/reservas_check-in_03.png" alt="Check-in passo 3" width="1200" />
+</div>
+
+### 8) Checkout (sequência)
+
+<div align="center">
+  <img src="src/assets/images/reservas_checkout_01.png" alt="Checkout passo 1" width="1200" />
+</div>
+
+<div align="center">
+  <img src="src/assets/images/reservas_checkout_02.png" alt="Checkout passo 2" width="1200" />
+</div>
+
+<div align="center">
+  <img src="src/assets/images/reservas_checkout_03.png" alt="Checkout passo 3" width="1200" />
+</div>
+
+### 9) Faturamento
+
+<div align="center">
+  <img src="src/assets/images/faturamento.png" alt="Faturamento (fatura)" width="1200" />
+</div>
+
+### 10) Listagem com valor atualizado
+
+<div align="center">
+  <img src="src/assets/images/reservas_listagem.png" alt="Listagem após faturamento" width="1200" />
+</div>
+
+<!-- markdownlint-enable MD033 -->
+
+## 👨‍💻 Autor
+
+Desenvolvido com ❤️ por **Daniel Silva**.
